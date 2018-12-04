@@ -1,4 +1,6 @@
-﻿using Chess_UWP.Views;
+﻿using Caliburn.Micro;
+using Chess_UWP.ViewModels;
+using Chess_UWP.Views;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,16 +24,26 @@ namespace Chess_UWP
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
-    sealed partial class App : Application
+    sealed partial class App/* : Application*/
     {
+        private WinRTContainer container;
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
         public App()
         {
+            Initialize();
             this.InitializeComponent();
-            this.Suspending += OnSuspending;
+        }
+
+        protected override void Configure()
+        {
+            container = new WinRTContainer();
+            container.RegisterWinRTServices();
+
+            container.PerRequest<BoardViewModel>();
         }
 
         /// <summary>
@@ -41,42 +53,48 @@ namespace Chess_UWP
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            Frame rootFrame = Window.Current.Content as Frame;
+            if (e.PreviousExecutionState == ApplicationExecutionState.Running)
+                return;
 
-            // Do not repeat app initialization when the Window already has content,
-            // just ensure that the window is active
-            if (rootFrame == null)
-            {
-                // Create a Frame to act as the navigation context and navigate to the first page
-                rootFrame = new Frame();
+            DisplayRootView<BoardView>();
 
-                rootFrame.NavigationFailed += OnNavigationFailed;
-                rootFrame.Navigated += OnNavigated;
 
-                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
-                {
-                    //TODO: Load state from previously suspended application
-                }
+            //Frame rootFrame = Window.Current.Content as Frame;
 
-                // Place the frame in the current Window
-                Window.Current.Content = rootFrame;
+            //// Do not repeat app initialization when the Window already has content,
+            //// just ensure that the window is active
+            //if (rootFrame == null)
+            //{
+            //    // Create a Frame to act as the navigation context and navigate to the first page
+            //    rootFrame = new Frame();
 
-                SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
-                SetBackButtonVisibility(rootFrame);
-            }
+            //    rootFrame.NavigationFailed += OnNavigationFailed;
+            //    rootFrame.Navigated += OnNavigated;
 
-            if (e.PrelaunchActivated == false)
-            {
-                if (rootFrame.Content == null)
-                {
-                    // When the navigation stack isn't restored navigate to the first page,
-                    // configuring the new page by passing required information as a navigation
-                    // parameter
-                    rootFrame.Navigate(typeof(BoardView), e.Arguments);
-                }
-                // Ensure the current window is active
-                Window.Current.Activate();
-            }
+            //    if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
+            //    {
+            //        //TODO: Load state from previously suspended application
+            //    }
+
+            //    // Place the frame in the current Window
+            //    Window.Current.Content = rootFrame;
+
+            //    SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
+            //    SetBackButtonVisibility(rootFrame);
+            //}
+
+            //if (e.PrelaunchActivated == false)
+            //{
+            //    if (rootFrame.Content == null)
+            //    {
+            //        // When the navigation stack isn't restored navigate to the first page,
+            //        // configuring the new page by passing required information as a navigation
+            //        // parameter
+            //        rootFrame.Navigate(typeof(BoardView), e.Arguments);
+            //    }
+            //    // Ensure the current window is active
+            //    Window.Current.Activate();
+            //}
         }
 
         /// <summary>
@@ -92,20 +110,6 @@ namespace Chess_UWP
         private void OnNavigated(object sender, NavigationEventArgs e)
         {
             SetBackButtonVisibility((Frame)sender);
-        }
-
-        /// <summary>
-        /// Invoked when application execution is being suspended.  Application state is saved
-        /// without knowing whether the application will be terminated or resumed with the contents
-        /// of memory still intact.
-        /// </summary>
-        /// <param name="sender">The source of the suspend request.</param>
-        /// <param name="e">Details about the suspend request.</param>
-        private void OnSuspending(object sender, SuspendingEventArgs e)
-        {
-            var deferral = e.SuspendingOperation.GetDeferral();
-            //TODO: Save application state and stop any background activity
-            deferral.Complete();
         }
 
         private void OnBackRequested(object sender, BackRequestedEventArgs e)
@@ -124,6 +128,27 @@ namespace Chess_UWP
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = frame.CanGoBack
                 ? AppViewBackButtonVisibility.Visible
                 : AppViewBackButtonVisibility.Collapsed;
+        }
+
+
+        protected override void PrepareViewFirst(Frame rootFrame)
+        {
+            container.RegisterNavigationService(rootFrame);
+        }
+
+        protected override object GetInstance(Type service, string key)
+        {
+            return container.GetInstance(service, key);
+        }
+
+        protected override IEnumerable<object> GetAllInstances(Type service)
+        {
+            return container.GetAllInstances(service);
+        }
+
+        protected override void BuildUp(object instance)
+        {
+            container.BuildUp(instance);
         }
     }
 }

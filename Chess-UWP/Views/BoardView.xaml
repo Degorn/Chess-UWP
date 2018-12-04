@@ -7,6 +7,7 @@
     xmlns:local="using:Chess_UWP.Models"
     xmlns:converters="using:Chess_UWP.Infrastructure.Converters"
     xmlns:controls="using:Chess_UWP.Controls"
+    xmlns:cl="using:Caliburn.Micro"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Height="900" Width="1200">
 
@@ -18,7 +19,7 @@
     <Grid>
         <Grid Width="800" Height="800"
               BorderThickness="2" BorderBrush="Black">
-            <ItemsControl ItemsSource="{x:Bind boardViewModel.Cells}">
+            <ItemsControl x:Name="Cells">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Canvas/>
@@ -26,17 +27,17 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="local:BoardCell">
-                        <Rectangle Fill="{x:Bind Color, Converter={StaticResource ColorToSolidColorBrushConverter}}"
+                        <Rectangle x:Name="Cell"
                                    Width="{x:Bind CellSize}" Height="{x:Bind CellSize}"
+                                   Fill="{x:Bind Color, Converter={StaticResource ColorToSolidColorBrushConverter}}"
                                    Margin="{x:Bind Position, Converter={StaticResource PositionToMarginConverter}}"
-                                   Tag="{x:Bind}"
-                                   PointerReleased="Cell_PointerReleased">
+                                   cl:Message.Attach="[Event Tapped] = [Action Cell($dataContext)]">
                         </Rectangle>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
-            <ItemsControl ItemsSource="{x:Bind boardViewModel.Figures}">
+            <ItemsControl x:Name="Figures">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Canvas/>

@@ -10,7 +10,7 @@ using static Chess_UWP.Models.Board;
 
 namespace Chess_UWP.Infrastructure
 {
-    public class GameProvider
+    public class GameProvider : IGameProvider
     {
         public ObservableCollection<FigureState> FiguresOnBoard { get; private set; }
 
