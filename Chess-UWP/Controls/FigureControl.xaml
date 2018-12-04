@@ -1,0 +1,27 @@
+﻿<UserControl
+    x:Class="Chess_UWP.Controls.FigureControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:Chess_UWP.Infrastructure.Converters"
+    mc:Ignorable="d"
+    d:DesignHeight="100"
+    d:DesignWidth="100">
+
+    <UserControl.Resources>
+        <local:UriToBitmapImageConverter x:Key="UriToBitmapImageConverter"/>
+        <local:PositionToMarginConverter x:Key="PositionToMarginConverter"/>
+        <local:BoolToBorderThickness x:Key="BoolToBorderThickness"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Border BorderBrush="Green"
+                Width="100"
+                BorderThickness="{Binding Selected, Converter={StaticResource BoolToBorderThickness}}"
+                Margin="{Binding Position, Converter={StaticResource PositionToMarginConverter}}">
+            <Image Source="{Binding Figure.Image, Converter={StaticResource UriToBitmapImageConverter}}"
+               IsHitTestVisible="False"/>
+        </Border>
+    </Grid>
+</UserControl>

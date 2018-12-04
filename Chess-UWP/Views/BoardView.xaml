@@ -1,0 +1,65 @@
+﻿<Page
+    x:Class="Chess_UWP.Views.BoardView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:Chess_UWP.Models"
+    xmlns:converters="using:Chess_UWP.Infrastructure.Converters"
+    xmlns:controls="using:Chess_UWP.Controls"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Height="900" Width="1200">
+
+    <Page.Resources>
+        <converters:ColorToSolidColorBrushConverter x:Key="ColorToSolidColorBrushConverter"/>
+        <converters:PositionToMarginConverter x:Key="PositionToMarginConverter"/>
+    </Page.Resources>
+
+    <Grid>
+        <Grid Width="800" Height="800"
+              BorderThickness="2" BorderBrush="Black">
+            <ItemsControl ItemsSource="{x:Bind boardViewModel.Cells}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="local:BoardCell">
+                        <Rectangle Fill="{x:Bind Color, Converter={StaticResource ColorToSolidColorBrushConverter}}"
+                                   Width="{x:Bind CellSize}" Height="{x:Bind CellSize}"
+                                   Margin="{x:Bind Position, Converter={StaticResource PositionToMarginConverter}}"
+                                   Tag="{x:Bind}"
+                                   PointerReleased="Cell_PointerReleased">
+                        </Rectangle>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <ItemsControl ItemsSource="{x:Bind boardViewModel.Figures}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <controls:FigureControl/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+
+        <ContentDialog x:Name="ContenDialogPawnPromotion">
+            <StackPanel x:Name="StackPanelPawnPromotionSelect">
+                <StackPanel.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                        <Setter Property="Margin" Value="0,0,0,8"/>
+                        <Setter Property="Width" Value="120"/>
+                    </Style>
+                </StackPanel.Resources>
+            </StackPanel>
+        </ContentDialog>
+    </Grid>
+</Page>
