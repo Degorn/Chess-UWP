@@ -664,16 +664,15 @@ namespace Chess_UWP.Infrastructure
 
         private void OnTick(object state)
         {
-            secondsLeft--;
             syncContext.Post(a =>
             {
                 TimerTick?.Invoke(this, new TimerTickEventArgs { SecondsLeft = secondsLeft });
+                secondsLeft--;
+                if (secondsLeft < 0)
+                {
+                    MoveFinalizer();
+                }
             }, null);
-
-            if (secondsLeft <= 0)
-            {
-                MoveFinalizer();
-            }
         }
 
         public void SetTimerOnMove(int secondsOnMove)
