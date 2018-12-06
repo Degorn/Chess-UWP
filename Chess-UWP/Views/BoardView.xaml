@@ -50,8 +50,13 @@
             </ItemsControl>
         </Grid>
 
-        <ContentDialog x:Name="ContenDialogPawnPromotion">
-            <ItemsControl x:Name="PawnPromotionTypes">
+        <Grid x:Name="PawnPromotionGrid"
+              Visibility="{Binding IsPawnPromotion}">
+            <Grid.Background>
+                <SolidColorBrush Color="Gray" Opacity="0.5"/>
+            </Grid.Background>
+            <ItemsControl x:Name="PawnPromotionTypes"
+                          VerticalAlignment="Center">
                 <ItemsPanelTemplate>
                     <StackPanel/>
                 </ItemsPanelTemplate>
@@ -61,11 +66,12 @@
                                 Margin="0,0,0,8"
                                 Width="120"
                                 Content="{Binding}"
-                                Click="ButtonPawnPromotion_Click">
+                                Background="Wheat"
+                                cl:Message.Attach="[Event Tapped] = [Action PawnPromotion($dataContext)]">
                         </Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </ContentDialog>
+        </Grid>
     </Grid>
 </Page>

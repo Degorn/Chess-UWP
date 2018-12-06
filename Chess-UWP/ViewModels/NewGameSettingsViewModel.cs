@@ -30,8 +30,8 @@ namespace Chess_UWP.ViewModels
             }
             pageNavigationService.NavigateToViewModel<BoardViewModel>(new GameStartSettings
             {
-                FirstUserName = firstUserName ?? "Player 1",
-                SecondUserName = secondUserName ?? "Player 2",
+                FirstUserName = firstUserName,
+                SecondUserName = secondUserName,
                 SecondsOnTurn = secondsOnTurn
             });
         }

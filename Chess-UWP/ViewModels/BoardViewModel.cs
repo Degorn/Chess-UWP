@@ -47,6 +47,17 @@ namespace Chess_UWP.ViewModels
             }
         }
 
+        private bool isPawnPromotion;
+        public bool IsPawnPromotion
+        {
+            get => isPawnPromotion;
+            set
+            {
+                isPawnPromotion = value;
+                NotifyOfPropertyChange(() => IsPawnPromotion);
+            }
+        }
+
         public BoardViewModel(INavigationService pageNavigationService) : base(pageNavigationService)
         {
             CellsInitializer cellsInitializer = new CellsInitializer();
@@ -58,8 +69,8 @@ namespace Chess_UWP.ViewModels
 
         protected override void OnActivate()
         {
-            Player playerWhite = new Player(Parameter.FirstUserName, Color.White);
-            Player playerBlack = new Player(Parameter.SecondUserName, Color.Black);
+            Player playerWhite = new Player(Parameter?.FirstUserName ?? "Player 1", Color.White);
+            Player playerBlack = new Player(Parameter?.SecondUserName ?? "Player 2", Color.Black);
             IFiguresInitializer figuresInitializer = IoC.Get<IFiguresInitializer>();
             IFiguresImagesInitializer figuresImagesInitializer = IoC.Get<IFiguresImagesInitializer>();
 
@@ -87,8 +98,6 @@ namespace Chess_UWP.ViewModels
             }
         }
 
-        public event UserInputDelegate StartPawnPromotion;
-        public event UserInputDelegate EndPawnPromotion;
         public event GameOverDelegate GameOverEvent;
 
         private void CellClick(BoardCell cell)
@@ -99,13 +108,13 @@ namespace Chess_UWP.ViewModels
 
         private void StartPawnPromition()
         {
-            StartPawnPromotion();
+            IsPawnPromotion = true;
         }
 
         public void PawnPromotion(string type)
         {
             gameProvider.PromotePawn(type);
-            EndPawnPromotion();
+            IsPawnPromotion = false;
         }
 
         private void GameOver(object sender, GameOverEventArgs e)
