@@ -8,7 +8,7 @@ namespace Chess_UWP.Infrastructure.Initializers
 {
     public class FiguresInitializer : IFiguresInitializer
     {
-        public IEnumerable<FigureState> GetFigures(IFiguresimagesInitializer imagesInitializer)
+        public IEnumerable<FigureState> GetFigures(IFiguresImagesInitializer imagesInitializer)
         {
             List<FigureState> figures = new List<FigureState>
             {

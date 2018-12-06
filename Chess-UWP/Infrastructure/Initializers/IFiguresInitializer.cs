@@ -5,6 +5,6 @@ namespace Chess_UWP.Infrastructure.Initializers
 {
     public interface IFiguresInitializer
     {
-        IEnumerable<FigureState> GetFigures(IFiguresimagesInitializer imagesInitializer);
+        IEnumerable<FigureState> GetFigures(IFiguresImagesInitializer imagesInitializer);
     }
 }

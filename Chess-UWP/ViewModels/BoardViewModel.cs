@@ -54,11 +54,14 @@ namespace Chess_UWP.ViewModels
             {
                 cells.Add(item);
             }
+        }
 
-            Player playerWhite = new Player("Player1", Color.White);
-            Player playerBlack = new Player("Player2", Color.Black);
-            IFiguresInitializer figuresInitializer = new FiguresInitializer();
-            IFiguresimagesInitializer figuresImagesInitializer = new FiguresimagesInitializerDefault();
+        protected override void OnActivate()
+        {
+            Player playerWhite = new Player(Parameter.FirstUserName, Color.White);
+            Player playerBlack = new Player(Parameter.SecondUserName, Color.Black);
+            IFiguresInitializer figuresInitializer = IoC.Get<IFiguresInitializer>();
+            IFiguresImagesInitializer figuresImagesInitializer = IoC.Get<IFiguresImagesInitializer>();
 
             gameProvider = new GameProvider(figuresInitializer, figuresImagesInitializer, new Player[] { playerWhite, playerBlack });
             gameProvider.CollectionChanged += GameProvider_CollectionChanged;

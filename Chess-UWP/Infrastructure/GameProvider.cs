@@ -22,17 +22,17 @@ namespace Chess_UWP.Infrastructure
 
         private FigureState currentlySelectedFigure;
 
-        private IFiguresimagesInitializer ImagesInitializer { get; }
+        private IFiguresImagesInitializer ImagesInitializer { get; }
 
         #region Constructors
 
-        public GameProvider(IFiguresInitializer figuresInitializer, IFiguresimagesInitializer imagesInitializer)
+        public GameProvider(IFiguresInitializer figuresInitializer, IFiguresImagesInitializer imagesInitializer)
         {
             ImagesInitializer = imagesInitializer;
             FiguresOnBoard = figuresInitializer.GetFigures(imagesInitializer).ToList();
         }
 
-        public GameProvider(IFiguresInitializer figuresInitializer, IFiguresimagesInitializer imagesInitializer, Player[] players) : this(figuresInitializer, imagesInitializer)
+        public GameProvider(IFiguresInitializer figuresInitializer, IFiguresImagesInitializer imagesInitializer, Player[] players) : this(figuresInitializer, imagesInitializer)
         {
             this.players = players;
         }

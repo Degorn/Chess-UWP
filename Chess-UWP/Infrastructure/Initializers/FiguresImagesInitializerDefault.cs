@@ -5,7 +5,7 @@ using static Chess_UWP.Models.Board;
 
 namespace Chess_UWP.Infrastructure.Initializers
 {
-    public class FiguresimagesInitializerDefault : IFiguresimagesInitializer
+    public class FiguresimagesInitializerDefault : IFiguresImagesInitializer
     {
         public Uri GetImage<T>(Color color) where T : Figure
         {

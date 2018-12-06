@@ -6,7 +6,7 @@ namespace Chess_UWP.Tests.FiguresInitializators
 {
     class FiguresInitializerEmpty : IFiguresInitializer
     {
-        public IEnumerable<FigureState> GetFigures(IFiguresimagesInitializer imagesInitializer)
+        public IEnumerable<FigureState> GetFigures(IFiguresImagesInitializer imagesInitializer)
         {
             return new List<FigureState>();
         }

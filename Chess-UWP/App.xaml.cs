@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using Chess_UWP.Infrastructure.Initializers;
 using Chess_UWP.ViewModels;
 using Chess_UWP.Views;
 using System;
@@ -35,7 +36,9 @@ namespace Chess_UWP
                 PerRequest<MainMenuViewModel>().
                 PerRequest<SettingsViewModel>().
                 PerRequest<NewGameSettingsViewModel>().
-                PerRequest<BoardViewModel>();
+                PerRequest<BoardViewModel>().
+                Singleton<IFiguresImagesInitializer, FiguresimagesInitializerDefault>().
+                Singleton<IFiguresInitializer, FiguresInitializer>();
         }
 
         protected override void PrepareViewFirst(Frame rootFrame)

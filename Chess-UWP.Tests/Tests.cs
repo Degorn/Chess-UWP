@@ -25,7 +25,7 @@ namespace Chess_UWP.Tests
         public Tests()
         {
             IFiguresInitializer figuresInitializer = new FiguresInitializer();
-            IFiguresimagesInitializer figuresImagesInitializer = new FiguresimagesInitializerDefault();
+            IFiguresImagesInitializer figuresImagesInitializer = new FiguresimagesInitializerDefault();
 
             gameProvider = new GameProvider(figuresInitializer, figuresImagesInitializer, new Player[] { new Player("P1", Color.White), new Player("P2", Color.Black) });
         }

@@ -21,9 +21,11 @@
             
             <TextBlock Text="2-nd player name:"/>
             <TextBox x:Name="SecondUserName"/>
-            
-            <CheckBox Content="Limit time for the turn"/>
-            <TextBox x:Name="SecondsOnTurn" PlaceholderText="Seconds on turn"/>
+
+            <CheckBox x:Name="IsTurnLimit" Content="Limit time for the turn"/>
+            <TextBox x:Name="SecondsOnTurn"
+                     IsEnabled="{Binding IsTurnLimit}"
+                     PlaceholderText="Seconds on turn"/>
             
             <Button x:Name="Start"
                     Content="Start"
