@@ -13,7 +13,11 @@ namespace Chess_UWP.Models
         public Point Position
         {
             get => position;
-            set => NotifyOfPropertyChange(() => Position);
+            set
+            {
+                position = value;
+                NotifyOfPropertyChange(() => Position);
+            }
         }
 
         public Color Color { get; set; }
@@ -22,7 +26,11 @@ namespace Chess_UWP.Models
         public bool Selected
         {
             get => selected;
-            set => NotifyOfPropertyChange(() => Selected);
+            set
+            {
+                selected = value;
+                NotifyOfPropertyChange(() => Selected);
+            }
         }
 
         public FigureState(Figure figure, Point position, Color color = Color.White)

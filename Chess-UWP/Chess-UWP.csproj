@@ -103,6 +103,7 @@
     <Compile Include="Infrastructure\Converters\ColorToSolidColorBrushConverter.cs" />
     <Compile Include="Infrastructure\Converters\PositionToMarginConverter.cs" />
     <Compile Include="Infrastructure\Converters\UriToBitmapImageConverter.cs" />
+    <Compile Include="Infrastructure\Events.cs" />
     <Compile Include="Infrastructure\ICellsInitializer.cs" />
     <Compile Include="Infrastructure\IGameProvider.cs" />
     <Compile Include="Infrastructure\Initializers\FiguresImagesInitializerDefault.cs" />

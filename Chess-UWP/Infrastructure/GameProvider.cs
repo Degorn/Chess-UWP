@@ -12,7 +12,8 @@ namespace Chess_UWP.Infrastructure
 {
     public class GameProvider : IGameProvider
     {
-        public ObservableCollection<FigureState> FiguresOnBoard { get; private set; }
+        private ICollection<FigureState> FiguresOnBoard { get; set; }
+        public event CollectionChanged CollectionChanged;
 
         private int playerId = 0;
         private readonly Player[] players;
@@ -28,11 +29,7 @@ namespace Chess_UWP.Infrastructure
         public GameProvider(IFiguresInitializer figuresInitializer, IFiguresimagesInitializer imagesInitializer)
         {
             ImagesInitializer = imagesInitializer;
-            FiguresOnBoard = new ObservableCollection<FigureState>();
-            foreach (FigureState figure in figuresInitializer.GetFigures(imagesInitializer))
-            {
-                FiguresOnBoard.Add(figure);
-            }
+            FiguresOnBoard = figuresInitializer.GetFigures(imagesInitializer).ToList();
         }
 
         public GameProvider(IFiguresInitializer figuresInitializer, IFiguresimagesInitializer imagesInitializer, Player[] players) : this(figuresInitializer, imagesInitializer)
@@ -59,9 +56,34 @@ namespace Chess_UWP.Infrastructure
             return FiguresOnBoard.FirstOrDefault(f => f.Figure.GetType() == typeof(King) && f.Color == color);
         }
 
+        private void AddFigure(FigureState figure)
+        {
+            FiguresOnBoard.Add(figure);
+            CollectionChanged(this, new CollectionChangedEventHandler
+            {
+                Operation = ListChagesOperation.Add,
+                Item = figure
+            });
+        }
+
+        private void RemoveFigure(FigureState figure)
+        {
+            FiguresOnBoard.Remove(figure);
+            CollectionChanged(this, new CollectionChangedEventHandler
+            {
+                Operation = ListChagesOperation.Remove,
+                Item = figure
+            });
+        }
+
         #endregion
 
         #region Main functionality
+
+        public IEnumerable<FigureState> GetFigures()
+        {
+            return FiguresOnBoard;
+        }
 
         private IEnumerable<Direction> GetFigureDirections(FigureState figure, bool isPotentialCalculation = false)
         {
@@ -145,16 +167,7 @@ namespace Chess_UWP.Infrastructure
 
         public void ResetFigures(IEnumerable<FigureState> figures)
         {
-            foreach (FigureState figure in figures)
-            {
-                FiguresOnBoard.Add(figure);
-            }
-            //FiguresOnBoard = figures.ToList();
-        }
-
-        public void ResetFigures(ObservableCollection<FigureState> figures)
-        {
-            FiguresOnBoard = figures;
+            FiguresOnBoard = figures.ToList();
         }
 
         private void TryToMoveTo(FigureState figure, Point position)
@@ -175,13 +188,13 @@ namespace Chess_UWP.Infrastructure
             FigureState figureOnPosition = GetFigureByPosition(position);
             if (figureOnPosition != null)
             {
-                DestroyFigure(figureOnPosition);
+                RemoveFigure(figureOnPosition);
             }
 
             // En passant.
             if (position == enPassantPosition)
             {
-                DestroyFigure(enPassantPawn);
+                RemoveFigure(enPassantPawn);
             }
             enPassantPawn = null;
             if (figure.Figure is Pawn &&
@@ -261,11 +274,6 @@ namespace Chess_UWP.Infrastructure
             }
 
             return false;
-        }
-
-        private void DestroyFigure(FigureState figure)
-        {
-            FiguresOnBoard.Remove(figure);
         }
 
         private void SwitchPlayer()
@@ -376,7 +384,6 @@ namespace Chess_UWP.Infrastructure
 
         #region Checkmate state
 
-        public delegate void GameOverDelegate(object sender, GameOverEventArgs e);
         public event GameOverDelegate GameOver;
 
         public enum CheckmateState
@@ -560,7 +567,6 @@ namespace Chess_UWP.Infrastructure
 
         #region Pawn promotion
 
-        public delegate void UserInputDelegate();
         public event UserInputDelegate StartPawnPromotion;
 
         private bool CheckPawnPromotion(FigureState pawn)
@@ -599,8 +605,8 @@ namespace Chess_UWP.Infrastructure
 
             FigureState newFigure = new FigureState(figure, pawn.Position, pawn.Color);
             newFigure.Figure.Image = ImagesInitializer.GetImage(type, newFigure.Color);
-            FiguresOnBoard.Add(newFigure);
-            FiguresOnBoard.Remove(pawn);
+            AddFigure(newFigure);
+            RemoveFigure(pawn);
         }
 
         public void PromotePawn(string type)
@@ -634,10 +640,5 @@ namespace Chess_UWP.Infrastructure
         }
 
         #endregion
-    }
-
-    public class GameOverEventArgs : EventArgs
-    {
-        public Player Winner;
     }
 }

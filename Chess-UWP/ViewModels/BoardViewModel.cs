@@ -3,8 +3,8 @@ using Chess_UWP.Infrastructure;
 using Chess_UWP.Infrastructure.Initializers;
 using Chess_UWP.Models;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Windows.Foundation;
-using static Chess_UWP.Infrastructure.GameProvider;
 using static Chess_UWP.Models.Board;
 
 namespace Chess_UWP.ViewModels
@@ -61,10 +61,27 @@ namespace Chess_UWP.ViewModels
             gameProvider = new GameProvider(figuresInitializer, figuresImagesInitializer, new Player[] { playerWhite, playerBlack });
             PawnPromotionTypes = new ObservableCollection<string>(gameProvider.GetPawnPromotionTypes());
 
+            gameProvider.CollectionChanged += GameProvider_CollectionChanged;
+
             gameProvider.StartPawnPromotion += StartPawnPromition;
             gameProvider.GameOver += GameOver;
 
-            Figures = gameProvider.FiguresOnBoard;
+            Figures = new ObservableCollection<FigureState>(gameProvider.GetFigures());
+        }
+
+        private void GameProvider_CollectionChanged(object sender, CollectionChangedEventHandler e)
+        {
+            switch (e.Operation)
+            {
+                case ListChagesOperation.Add:
+                    Figures.Add((FigureState)e.Item);
+                    break;
+                case ListChagesOperation.Remove:
+                    Figures.Remove((FigureState)e.Item);
+                    break;
+                default:
+                    break;
+            }
         }
 
         public event UserInputDelegate StartPawnPromotion;

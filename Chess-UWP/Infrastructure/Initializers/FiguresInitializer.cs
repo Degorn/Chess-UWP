@@ -29,7 +29,7 @@ namespace Chess_UWP.Infrastructure.Initializers
                 new FigureState(new King{ Image = imagesInitializer?.GetImage<King>(Color.Black) }, new Point(4, 0), Color.Black),
                 new FigureState(new King{ Image = imagesInitializer?.GetImage<King>(Color.White) }, new Point(4, 7), Color.White)
             };
-            for (int i = 0; i < Board.BOARD_WIDTH; i++)
+            for (int i = 0; i < BOARD_WIDTH; i++)
             {
                 figures.Add(new FigureState(new Pawn(false) { Image = imagesInitializer?.GetImage<Pawn>(Color.Black) }, new Point(i, 1), Color.Black));
                 figures.Add(new FigureState(new Pawn(true)  { Image = imagesInitializer?.GetImage<Pawn>(Color.White) }, new Point(i, 6), Color.White));
