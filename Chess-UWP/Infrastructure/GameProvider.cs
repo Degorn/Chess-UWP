@@ -197,8 +197,7 @@ namespace Chess_UWP.Infrastructure
             // Pawn promotion.
             if (CheckPawnPromotion(figure))
             {
-                IEnumerable<Type> types = GetPossibleFiguresTypeToPawnPromotion();
-                StartPawnPromotion(types);
+                StartPawnPromotion();
                 return;
             }
 
@@ -561,7 +560,7 @@ namespace Chess_UWP.Infrastructure
 
         #region Pawn promotion
 
-        public delegate void UserInputDelegate(IEnumerable<Type> types);
+        public delegate void UserInputDelegate();
         public event UserInputDelegate StartPawnPromotion;
 
         private bool CheckPawnPromotion(FigureState pawn)
@@ -575,11 +574,11 @@ namespace Chess_UWP.Infrastructure
                    pawn.Color == Color.White && pawn.Position.Y == 0;
         }
 
-        private IEnumerable<Type> GetPossibleFiguresTypeToPawnPromotion()
+        public IEnumerable<string> GetPawnPromotionTypes()
         {
-            return new Type[]
+            return new string[]
             {
-                typeof(Rook), typeof(Knight), typeof(Bishop), typeof(Queen)
+                "Rook", "Knight", "Bishop", "Queen"
             };
         }
 

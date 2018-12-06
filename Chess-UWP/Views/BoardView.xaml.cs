@@ -1,4 +1,9 @@
 ﻿using Windows.UI.Xaml.Controls;
+using System;
+using Chess_UWP.ViewModels;
+using Chess_UWP.Infrastructure;
+using Windows.UI.Popups;
+using Windows.UI.Xaml;
 
 namespace Chess_UWP.Views
 {
@@ -12,44 +17,36 @@ namespace Chess_UWP.Views
             this.InitializeComponent();
         }
 
-        //private string choosedType = "";
-        //private async void GameProvider_PawnPromotionChoose(IEnumerable<Type> types)
-        //{
-        //    foreach (Type type in types)
-        //    {
-        //        Button newButton = new Button
-        //        {
-        //            Content = type.Name
-        //        };
-        //        StackPanelPawnPromotionSelect.Children.Add(newButton);
-        //        newButton.Click += PawnPromotionTypeButton_Click;
-        //    }
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            BoardViewModel viewModel = DataContext as BoardViewModel;
+            viewModel.StartPawnPromotion += ShowPawnPromotionDialog;
+            viewModel.EndPawnPromotion += ClosePawnPromotionDialog;
+            viewModel.GameOverEvent += GameOver;
+        }
 
-        //    await ContenDialogPawnPromotion.ShowAsync();
-        //}
+        private async void ShowPawnPromotionDialog()
+        {
+            await ContenDialogPawnPromotion.ShowAsync();
+        }
 
-        //private void PawnPromotionTypeButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    choosedType = (sender as Button).Content.ToString();
-        //    gameProvider.PromotePawn(choosedType);
+        private void ClosePawnPromotionDialog()
+        {
+            ContenDialogPawnPromotion.Hide();
+        }
 
-        //    ContenDialogPawnPromotion.Hide();
-        //    StackPanelPawnPromotionSelect.Children.Clear();
-        //}
+        private async void GameOver(object sender, GameOverEventArgs e)
+        {
+            MessageDialog dialog = new MessageDialog($"Winner: {e.Winner.Name} ({e.Winner.Color})!", "Checkmate! Game over");
+            await dialog.ShowAsync();
+            Application.Current.Exit();
+        }
 
-        //private void Cell_PointerReleased(object sender, PointerRoutedEventArgs e)
-        //{
-        //    BoardCell cell = ((FrameworkElement)sender).Tag as BoardCell;
-        //    Point cellPosition = cell.Position;
-
-        //    gameProvider.DoActionByPositions(cellPosition);
-        //}
-
-        //private async void GameProvider_GameOver(object sender, GameOverEventArgs e)
-        //{
-        //    MessageDialog dialog = new MessageDialog($"Winner: {e.Winner.Name} ({e.Winner.Color})!", "Checkmate! Game over");
-        //    await dialog.ShowAsync();
-        //    Application.Current.Exit();
-        //}
+        private void ButtonPawnPromotion_Click(object sender, RoutedEventArgs e)
+        {
+            BoardViewModel viewModel = DataContext as BoardViewModel;
+            string choosedType = (sender as Button).Content.ToString();
+            viewModel.PawnPromotion(choosedType);
+        }
     }
 }

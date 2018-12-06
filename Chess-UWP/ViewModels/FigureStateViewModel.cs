@@ -1,14 +1,15 @@
-﻿using Chess_UWP.Models;
+﻿using Caliburn.Micro;
+using Chess_UWP.Models;
 
 namespace Chess_UWP.ViewModels
 {
-    class FigureStateViewModel : NotificationBase
+    public class FigureStateViewModel : PropertyChangedBase
     {
         private FigureState figureState;
         public FigureState FigureState
         {
             get => figureState;
-            set => SetProperty(ref figureState, value);
+            set => NotifyOfPropertyChange(() => FigureState);
         }
     }
 }

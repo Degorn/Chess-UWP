@@ -1,12 +1,11 @@
-﻿using Chess_UWP.Models.Figures;
-using Chess_UWP.ViewModels;
+﻿using Caliburn.Micro;
+using Chess_UWP.Models.Figures;
 using Windows.Foundation;
-using Windows.UI.Xaml;
 using static Chess_UWP.Models.Board;
 
 namespace Chess_UWP.Models
 {
-    public class FigureState : NotificationBase
+    public class FigureState : PropertyChangedBase
     {
         public Figure Figure { get; set; }
 
@@ -14,7 +13,7 @@ namespace Chess_UWP.Models
         public Point Position
         {
             get => position;
-            set => SetProperty(ref position, value);
+            set => NotifyOfPropertyChange(() => Position);
         }
 
         public Color Color { get; set; }
@@ -23,13 +22,13 @@ namespace Chess_UWP.Models
         public bool Selected
         {
             get => selected;
-            set => SetProperty(ref selected, value);
+            set => NotifyOfPropertyChange(() => Selected);
         }
 
         public FigureState(Figure figure, Point position, Color color = Color.White)
         {
             Figure = figure;
-            this.position = position;
+            Position = position;
             Color = color;
         }
     }

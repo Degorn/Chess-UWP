@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Chess_UWP.Models;
+using Chess_UWP.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

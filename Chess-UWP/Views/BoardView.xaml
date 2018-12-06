@@ -9,7 +9,7 @@
     xmlns:controls="using:Chess_UWP.Controls"
     xmlns:cl="using:Caliburn.Micro"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Height="900" Width="1200">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Height="900" Width="1200" Loaded="Page_Loaded">
 
     <Page.Resources>
         <converters:ColorToSolidColorBrushConverter x:Key="ColorToSolidColorBrushConverter"/>
@@ -27,11 +27,10 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="local:BoardCell">
-                        <Rectangle x:Name="Cell"
-                                   Width="{x:Bind CellSize}" Height="{x:Bind CellSize}"
+                        <Rectangle Width="{x:Bind CellSize}" Height="{x:Bind CellSize}"
                                    Fill="{x:Bind Color, Converter={StaticResource ColorToSolidColorBrushConverter}}"
                                    Margin="{x:Bind Position, Converter={StaticResource PositionToMarginConverter}}"
-                                   cl:Message.Attach="[Event Tapped] = [Action Cell($dataContext)]">
+                                   cl:Message.Attach="[Event Tapped] = [Action CellClick($dataContext)]">
                         </Rectangle>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -45,22 +44,28 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <controls:FigureControl/>
+                        <controls:FigureControl cl:Bind.Model="{Binding}"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Grid>
 
         <ContentDialog x:Name="ContenDialogPawnPromotion">
-            <StackPanel x:Name="StackPanelPawnPromotionSelect">
-                <StackPanel.Resources>
-                    <Style TargetType="Button">
-                        <Setter Property="HorizontalAlignment" Value="Center"/>
-                        <Setter Property="Margin" Value="0,0,0,8"/>
-                        <Setter Property="Width" Value="120"/>
-                    </Style>
-                </StackPanel.Resources>
-            </StackPanel>
+            <ItemsControl x:Name="PawnPromotionTypes">
+                <ItemsPanelTemplate>
+                    <StackPanel/>
+                </ItemsPanelTemplate>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button HorizontalAlignment="Center"
+                                Margin="0,0,0,8"
+                                Width="120"
+                                Content="{Binding}"
+                                Click="ButtonPawnPromotion_Click">
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </ContentDialog>
     </Grid>
 </Page>

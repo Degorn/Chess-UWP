@@ -4,7 +4,7 @@ using Chess_UWP.Infrastructure.Initializers;
 using Chess_UWP.Models;
 using System.Collections.ObjectModel;
 using Windows.Foundation;
-using Windows.UI.Xaml.Input;
+using static Chess_UWP.Infrastructure.GameProvider;
 using static Chess_UWP.Models.Board;
 
 namespace Chess_UWP.ViewModels
@@ -33,12 +33,23 @@ namespace Chess_UWP.ViewModels
             }
         }
 
-        IGameProvider gameProvider;
+        private IGameProvider gameProvider;
+
+        private ObservableCollection<string> pawnPromotionTypes = new ObservableCollection<string>();
+        public ObservableCollection<string> PawnPromotionTypes
+        {
+            get => pawnPromotionTypes;
+            set
+            {
+                pawnPromotionTypes = value;
+                NotifyOfPropertyChange(() => PawnPromotionTypes);
+            }
+        }
 
         public BoardViewModel()
         {
             CellsInitializer cellsInitializer = new CellsInitializer();
-            foreach (BoardCell item in cellsInitializer.GetBoardCells(Board.BOARD_WIDTH, Board.BOARD_HEIGHT))
+            foreach (BoardCell item in cellsInitializer.GetBoardCells(BOARD_WIDTH, BOARD_HEIGHT))
             {
                 cells.Add(item);
             }
@@ -48,17 +59,38 @@ namespace Chess_UWP.ViewModels
             IFiguresInitializer figuresInitializer = new FiguresInitializer();
             IFiguresimagesInitializer figuresImagesInitializer = new FiguresimagesInitializerDefault();
             gameProvider = new GameProvider(figuresInitializer, figuresImagesInitializer, new Player[] { playerWhite, playerBlack });
+            PawnPromotionTypes = new ObservableCollection<string>(gameProvider.GetPawnPromotionTypes());
 
-            //gameProvider.StartPawnPromotion += GameProvider_PawnPromotionChoose;
-            //gameProvider.GameOver += GameProvider_GameOver;
+            gameProvider.StartPawnPromotion += StartPawnPromition;
+            gameProvider.GameOver += GameOver;
 
             Figures = gameProvider.FiguresOnBoard;
         }
 
-        private void Cell(BoardCell cell)
+        public event UserInputDelegate StartPawnPromotion;
+        public event UserInputDelegate EndPawnPromotion;
+        public event GameOverDelegate GameOverEvent;
+
+        private void CellClick(BoardCell cell)
         {
             Point cellPosition = cell.Position;
             gameProvider.DoActionByPositions(cellPosition);
+        }
+
+        private void StartPawnPromition()
+        {
+            StartPawnPromotion();
+        }
+
+        public void PawnPromotion(string type)
+        {
+            gameProvider.PromotePawn(type);
+            EndPawnPromotion();
+        }
+
+        private void GameOver(object sender, GameOverEventArgs e)
+        {
+            GameOverEvent(sender, e);
         }
     }
 }

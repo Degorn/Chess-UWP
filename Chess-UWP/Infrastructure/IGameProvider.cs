@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Chess_UWP.Models;
 using Windows.Foundation;
@@ -15,6 +16,7 @@ namespace Chess_UWP.Infrastructure
         void DoActionByPositions(Point position);
         GameProvider.CheckmateState GetCheckmateState();
         IEnumerable<Point> GetPossibleFigurePositions(FigureState figure, bool isPotentialCalculation = false);
+        IEnumerable<string> GetPawnPromotionTypes();
         void PromotePawn(string type);
         void ResetFigures(IEnumerable<FigureState> figures);
         void ResetFigures(ObservableCollection<FigureState> figures);
