@@ -94,7 +94,7 @@ namespace Chess_UWP.ViewModels
             Figures = new ObservableCollection<FigureState>(gameProvider.GetFigures());
             PawnPromotionTypes = new ObservableCollection<string>(gameProvider.GetPawnPromotionTypes());
 
-            gameProvider.SetTimerOnMove(1);
+            gameProvider.SetTimerOnMove(Parameter?.SecondsOnTurn ?? 0);
             gameProvider.TimerTick += GameProvider_TimerTick;
             gameProvider.StartTimer();
         }

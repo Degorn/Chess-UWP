@@ -665,6 +665,11 @@ namespace Chess_UWP.Infrastructure
 
         public void StartTimer()
         {
+            if (SecondsOnMove == 0)
+            {
+                return;
+            }
+
             timer = new Timer(OnTick, null, 0, SecondsOnMove * 1000);
         }
 
