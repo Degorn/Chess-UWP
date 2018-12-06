@@ -3,8 +3,8 @@ using Chess_UWP.Models;
 using Chess_UWP.Models.Figures;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using Windows.Foundation;
 using static Chess_UWP.Models.Board;
 
@@ -30,6 +30,7 @@ namespace Chess_UWP.Infrastructure
         {
             ImagesInitializer = imagesInitializer;
             FiguresOnBoard = figuresInitializer.GetFigures(imagesInitializer).ToList();
+            syncContext = SynchronizationContext.Current;
         }
 
         public GameProvider(IFiguresInitializer figuresInitializer, IFiguresImagesInitializer imagesInitializer, Player[] players) : this(figuresInitializer, imagesInitializer)
@@ -637,6 +638,44 @@ namespace Chess_UWP.Infrastructure
             return enPassantPawn != null &&
                 currentlySelectedFigure.Figure is Pawn &&
                 potentialPosition == enPassantPosition;
+        }
+
+        #endregion
+
+        #region Timer
+
+        private SynchronizationContext syncContext;
+        public int SecondsOnMove { get; private set; }
+        private Timer timer;
+
+        public event EventHandler TimerTick;
+
+        private void OnTick(object state)
+        {
+            syncContext.Post(a =>
+            {
+                TimerTick?.Invoke(this, EventArgs.Empty);
+            }, null);
+        }
+
+        public void SetTimerOnMove(int secondsOnMove)
+        {
+            SecondsOnMove = secondsOnMove;
+        }
+
+        public void StartTimer()
+        {
+            timer = new Timer(OnTick, null, 0, SecondsOnMove * 1000);
+        }
+
+        private void StopTimer()
+        {
+            timer.Dispose();
+        }
+
+        private void ResetTimer()
+        {
+            StartTimer();
         }
 
         #endregion

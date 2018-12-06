@@ -50,7 +50,12 @@
             </ItemsControl>
         </Grid>
 
-        <Grid x:Name="PawnPromotionGrid"
+        <TextBlock x:Name="Timer"
+                   HorizontalAlignment="Left" 
+                   Width="200"
+                   TextWrapping="Wrap"/>
+
+        <!--<Grid x:Name="PawnPromotionGrid"
               Visibility="{Binding IsPawnPromotion}">
             <Grid.Background>
                 <SolidColorBrush Color="Gray" Opacity="0.5"/>
@@ -72,6 +77,6 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </Grid>
+        </Grid>-->
     </Grid>
 </Page>

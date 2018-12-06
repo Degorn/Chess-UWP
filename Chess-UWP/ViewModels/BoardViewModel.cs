@@ -2,6 +2,7 @@
 using Chess_UWP.Infrastructure;
 using Chess_UWP.Infrastructure.Initializers;
 using Chess_UWP.Models;
+using System;
 using System.Collections.ObjectModel;
 using Windows.Foundation;
 using static Chess_UWP.Models.Board;
@@ -58,6 +59,17 @@ namespace Chess_UWP.ViewModels
             }
         }
 
+        private string timer;
+        public string Timer
+        {
+            get => timer;
+            set
+            {
+                timer = value;
+                NotifyOfPropertyChange(() => Timer);
+            }
+        }
+
         public BoardViewModel(INavigationService pageNavigationService) : base(pageNavigationService)
         {
             CellsInitializer cellsInitializer = new CellsInitializer();
@@ -81,6 +93,15 @@ namespace Chess_UWP.ViewModels
 
             Figures = new ObservableCollection<FigureState>(gameProvider.GetFigures());
             PawnPromotionTypes = new ObservableCollection<string>(gameProvider.GetPawnPromotionTypes());
+
+            gameProvider.SetTimerOnMove(1);
+            gameProvider.TimerTick += GameProvider_TimerTick;
+            gameProvider.StartTimer();
+        }
+
+        private void GameProvider_TimerTick(object sender, EventArgs e)
+        {
+            Timer += DateTime.Now;
         }
 
         private void GameProvider_CollectionChanged(object sender, CollectionChangedEventHandler e)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Chess_UWP.Models;
 using Windows.Foundation;
 
@@ -10,6 +11,7 @@ namespace Chess_UWP.Infrastructure
 
         event GameOverDelegate GameOver;
         event UserInputDelegate StartPawnPromotion;
+        event EventHandler TimerTick;
 
         IEnumerable<FigureState> GetFigures();
         void ResetFigures(IEnumerable<FigureState> figures);
@@ -19,5 +21,8 @@ namespace Chess_UWP.Infrastructure
         GameProvider.CheckmateState GetCheckmateState();
         IEnumerable<string> GetPawnPromotionTypes();
         void PromotePawn(string type);
+
+        void SetTimerOnMove(int secondsOnMove);
+        void StartTimer();
     }
 }
