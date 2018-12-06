@@ -58,15 +58,14 @@ namespace Chess_UWP.ViewModels
             Player playerBlack = new Player("Player2", Color.Black);
             IFiguresInitializer figuresInitializer = new FiguresInitializer();
             IFiguresimagesInitializer figuresImagesInitializer = new FiguresimagesInitializerDefault();
+
             gameProvider = new GameProvider(figuresInitializer, figuresImagesInitializer, new Player[] { playerWhite, playerBlack });
-            PawnPromotionTypes = new ObservableCollection<string>(gameProvider.GetPawnPromotionTypes());
-
             gameProvider.CollectionChanged += GameProvider_CollectionChanged;
-
             gameProvider.StartPawnPromotion += StartPawnPromition;
             gameProvider.GameOver += GameOver;
 
             Figures = new ObservableCollection<FigureState>(gameProvider.GetFigures());
+            PawnPromotionTypes = new ObservableCollection<string>(gameProvider.GetPawnPromotionTypes());
         }
 
         private void GameProvider_CollectionChanged(object sender, CollectionChangedEventHandler e)
