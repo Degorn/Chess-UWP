@@ -211,7 +211,7 @@ namespace Chess_UWP.Infrastructure
             // Pawn promotion.
             if (CheckPawnPromotion(figure))
             {
-                StartPawnPromotion();
+                StartPawnPromotion(this, EventArgs.Empty);
                 return;
             }
 
@@ -284,11 +284,19 @@ namespace Chess_UWP.Infrastructure
                 return;
             }
 
+            ResetState();
+
             playerId++;
             if (playerId >= players.Length)
             {
                 playerId = 0;
             }
+        }
+
+        private void ResetState()
+        {
+            //currentlySelectedFigure = null;
+            ResetTimer();
         }
 
         #endregion
@@ -568,7 +576,7 @@ namespace Chess_UWP.Infrastructure
 
         #region Pawn promotion
 
-        public event UserInputDelegate StartPawnPromotion;
+        public event EventHandler StartPawnPromotion;
 
         private bool CheckPawnPromotion(FigureState pawn)
         {
@@ -645,17 +653,24 @@ namespace Chess_UWP.Infrastructure
         #region Timer
 
         private SynchronizationContext syncContext;
-        public int SecondsOnMove { get; private set; }
         private Timer timer;
+        public int SecondsOnMove { get; private set; }
+        private int secondsLeft;
 
-        public event EventHandler TimerTick;
+        public event TimerTickDelegate TimerTick;
 
         private void OnTick(object state)
         {
+            secondsLeft--;
             syncContext.Post(a =>
             {
-                TimerTick?.Invoke(this, EventArgs.Empty);
+                TimerTick?.Invoke(this, new TimerTickEventArgs { SecondsLeft = secondsLeft });
             }, null);
+
+            if (secondsLeft <= 0)
+            {
+                SwitchPlayer();
+            }
         }
 
         public void SetTimerOnMove(int secondsOnMove)
@@ -670,7 +685,8 @@ namespace Chess_UWP.Infrastructure
                 return;
             }
 
-            timer = new Timer(OnTick, null, 0, SecondsOnMove * 1000);
+            secondsLeft = SecondsOnMove;
+            timer = new Timer(OnTick, null, 1000, 1000);
         }
 
         private void StopTimer()
@@ -680,6 +696,7 @@ namespace Chess_UWP.Infrastructure
 
         private void ResetTimer()
         {
+            StopTimer();
             StartTimer();
         }
 

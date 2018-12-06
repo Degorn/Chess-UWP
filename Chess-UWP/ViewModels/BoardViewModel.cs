@@ -87,7 +87,7 @@ namespace Chess_UWP.ViewModels
             IFiguresImagesInitializer figuresImagesInitializer = IoC.Get<IFiguresImagesInitializer>();
 
             gameProvider = new GameProvider(figuresInitializer, figuresImagesInitializer, new Player[] { playerWhite, playerBlack });
-            gameProvider.CollectionChanged += GameProvider_CollectionChanged;
+            gameProvider.CollectionChanged += CollectionChanged;
             gameProvider.StartPawnPromotion += StartPawnPromition;
             gameProvider.GameOver += GameOver;
 
@@ -95,16 +95,16 @@ namespace Chess_UWP.ViewModels
             PawnPromotionTypes = new ObservableCollection<string>(gameProvider.GetPawnPromotionTypes());
 
             gameProvider.SetTimerOnMove(Parameter?.SecondsOnTurn ?? 0);
-            gameProvider.TimerTick += GameProvider_TimerTick;
+            gameProvider.TimerTick += TimerTick;
             gameProvider.StartTimer();
         }
 
-        private void GameProvider_TimerTick(object sender, EventArgs e)
+        private void TimerTick(object sender, TimerTickEventArgs e)
         {
-            Timer += DateTime.Now;
+            Timer += e.SecondsLeft;
         }
 
-        private void GameProvider_CollectionChanged(object sender, CollectionChangedEventHandler e)
+        private void CollectionChanged(object sender, CollectionChangedEventHandler e)
         {
             switch (e.Operation)
             {
@@ -127,7 +127,7 @@ namespace Chess_UWP.ViewModels
             gameProvider.DoActionByPositions(cellPosition);
         }
 
-        private void StartPawnPromition()
+        private void StartPawnPromition(object sender, EventArgs e)
         {
             IsPawnPromotion = true;
         }

@@ -8,10 +8,9 @@ namespace Chess_UWP.Infrastructure
     public interface IGameProvider
     {
         event CollectionChanged CollectionChanged;
-
         event GameOverDelegate GameOver;
-        event UserInputDelegate StartPawnPromotion;
-        event EventHandler TimerTick;
+        event EventHandler StartPawnPromotion;
+        event TimerTickDelegate TimerTick;
 
         IEnumerable<FigureState> GetFigures();
         void ResetFigures(IEnumerable<FigureState> figures);
