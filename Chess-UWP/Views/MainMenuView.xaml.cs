@@ -1,5 +1,4 @@
-﻿using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+﻿using Windows.UI.Xaml.Controls;
 
 namespace Chess_UWP.Views
 {
@@ -11,21 +10,6 @@ namespace Chess_UWP.Views
         public MainMenuView()
         {
             this.InitializeComponent();
-        }
-
-        private void ButtonNewGame_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(NewGameSettings));
-        }
-
-        private void ButtonSettings_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(SettingsView));
-        }
-
-        private void ButtonExit_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Exit();
         }
     }
 }

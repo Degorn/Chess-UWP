@@ -114,9 +114,10 @@
     <Compile Include="Models\Figures\Bishop.cs" />
     <Compile Include="Models\Figures\King.cs" />
     <Compile Include="Models\Figures\Queen.cs" />
+    <Compile Include="Models\GameStartSettings.cs" />
     <Compile Include="ViewModels\BoardViewModel.cs" />
     <Compile Include="ViewModels\FigureStateViewModel.cs" />
-    <Compile Include="ViewModels\NotificationBase.cs" />
+    <Compile Include="ViewModels\MainMenuViewModel.cs" />
     <Compile Include="Models\Board.cs" />
     <Compile Include="Models\BoardCell.cs" />
     <Compile Include="Models\Direction.cs" />
@@ -128,6 +129,8 @@
     <Compile Include="Models\Player.cs" />
     <Compile Include="Infrastructure\PointExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\NewGameSettingsViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\BoardView.xaml.cs">
       <DependentUpon>BoardView.xaml</DependentUpon>

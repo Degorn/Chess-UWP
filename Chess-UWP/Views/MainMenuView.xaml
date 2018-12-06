@@ -17,9 +17,9 @@
         </Grid.Resources>
 
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button Content="New game" Click="ButtonNewGame_Click"/>
-            <Button Content="Settings" Click="ButtonSettings_Click"/>
-            <Button Content="Exit" Click="ButtonExit_Click"/>
+            <Button x:Name="NewGame" Content="New game"/>
+            <Button x:Name="Settings" Content="Settings"/>
+            <Button x:Name="Close" Content="Exit"/>
         </StackPanel>
     </Grid>
 </Page>

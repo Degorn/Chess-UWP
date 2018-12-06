@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="Chess_UWP.Views.NewGameSettings"
+    x:Class="Chess_UWP.Views.NewGameSettingsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Chess_UWP.Views"
@@ -17,18 +17,18 @@
 
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Text="1-st player name:"/>
-            <TextBox x:Name="TextBoxFirstUserName"/>
+            <TextBox x:Name="FirstUserName"/>
             
             <TextBlock Text="2-nd player name:"/>
-            <TextBox x:Name="TextBoxSecondUserName"/>
+            <TextBox x:Name="SecondUserName"/>
             
             <CheckBox Content="Limit time for the turn"/>
-            <TextBox x:Name="TextBoxSecondsOnTurn" PlaceholderText="Seconds on turn"/>
+            <TextBox x:Name="SecondsOnTurn" PlaceholderText="Seconds on turn"/>
             
-            <Button Content="Start"
+            <Button x:Name="Start"
+                    Content="Start"
                     HorizontalAlignment="Center"
-                    Width="120"
-                    Click="ButtonStart_Click"/>
+                    Width="120"/>
         </StackPanel>
     </Grid>
 </Page>

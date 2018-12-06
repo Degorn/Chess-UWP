@@ -3,14 +3,15 @@ using Chess_UWP.Infrastructure;
 using Chess_UWP.Infrastructure.Initializers;
 using Chess_UWP.Models;
 using System.Collections.ObjectModel;
-using System.Linq;
 using Windows.Foundation;
 using static Chess_UWP.Models.Board;
 
 namespace Chess_UWP.ViewModels
 {
-    public class BoardViewModel : Screen
+    public class BoardViewModel : ViewModelBase
     {
+        public GameStartSettings Parameter { get; set; }
+
         private ObservableCollection<BoardCell> cells = new ObservableCollection<BoardCell>();
         public ObservableCollection<BoardCell> Cells
         {
@@ -46,7 +47,7 @@ namespace Chess_UWP.ViewModels
             }
         }
 
-        public BoardViewModel()
+        public BoardViewModel(INavigationService pageNavigationService) : base(pageNavigationService)
         {
             CellsInitializer cellsInitializer = new CellsInitializer();
             foreach (BoardCell item in cellsInitializer.GetBoardCells(BOARD_WIDTH, BOARD_HEIGHT))
