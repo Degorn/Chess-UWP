@@ -154,8 +154,6 @@ namespace Chess_UWP.Infrastructure
             if (currentlySelectedFigure != null)
             {
                 TryToMoveTo(currentlySelectedFigure, position);
-                currentlySelectedFigure.Selected = false;
-                currentlySelectedFigure = null;
             }
 
             FigureState figure = GetCurrentPlayerFigureByPosition(position);
@@ -231,6 +229,8 @@ namespace Chess_UWP.Infrastructure
                     Winner = EnemyPlayer
                 });
             }
+
+            ResetState();
         }
 
         private bool CheckIfFigureCanMoveTo(FigureState figure, Point potentialPosition)
@@ -284,8 +284,6 @@ namespace Chess_UWP.Infrastructure
                 return;
             }
 
-            ResetState();
-
             playerId++;
             if (playerId >= players.Length)
             {
@@ -295,7 +293,12 @@ namespace Chess_UWP.Infrastructure
 
         private void ResetState()
         {
-            //currentlySelectedFigure = null;
+            if (currentlySelectedFigure != null)
+            {
+                currentlySelectedFigure.Selected = false;
+                currentlySelectedFigure = null;
+            }
+
             ResetTimer();
         }
 
@@ -669,7 +672,7 @@ namespace Chess_UWP.Infrastructure
 
             if (secondsLeft <= 0)
             {
-                SwitchPlayer();
+                MoveFinalizer();
             }
         }
 
@@ -691,7 +694,7 @@ namespace Chess_UWP.Infrastructure
 
         private void StopTimer()
         {
-            timer.Dispose();
+            timer?.Dispose();
         }
 
         private void ResetTimer()

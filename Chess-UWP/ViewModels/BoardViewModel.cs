@@ -101,7 +101,7 @@ namespace Chess_UWP.ViewModels
 
         private void TimerTick(object sender, TimerTickEventArgs e)
         {
-            Timer += e.SecondsLeft;
+            Timer += $"\n{e.SecondsLeft} seconds left;";
         }
 
         private void CollectionChanged(object sender, CollectionChangedEventHandler e)
