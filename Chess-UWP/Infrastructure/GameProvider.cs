@@ -21,6 +21,25 @@ namespace Chess_UWP.Infrastructure
         private Player EnemyPlayer => players?.FirstOrDefault(p => p != CurrentPlayer);
 
         private FigureState currentlySelectedFigure;
+        private FigureState CurrentlySelectedFigure
+        {
+            get => currentlySelectedFigure;
+            set
+            {
+                if (value == null)
+                {
+                    if (currentlySelectedFigure != null)
+                    {
+                        currentlySelectedFigure.Selected = false;
+                    }
+                }
+                currentlySelectedFigure = value;
+                if (value != null)
+                {
+                    currentlySelectedFigure.Selected = true;
+                }
+            }
+        }
 
         private IFiguresImagesInitializer ImagesInitializer { get; }
 
@@ -57,13 +76,15 @@ namespace Chess_UWP.Infrastructure
             return FiguresOnBoard.FirstOrDefault(f => f.Figure.GetType() == typeof(King) && f.Color == color);
         }
 
-        private void AddFigure(FigureState figure)
+        private void AddFigure(Figure figure, Point position, Color color)
         {
-            FiguresOnBoard.Add(figure);
+            FigureState newFigure = new FigureState(figure, position, color);
+            newFigure.Figure.Image = ImagesInitializer.GetImage(figure.GetType(), color);
+            FiguresOnBoard.Add(newFigure);
             CollectionChanged(this, new CollectionChangedEventHandler
             {
                 Operation = ListChagesOperation.Add,
-                Item = figure
+                Item = newFigure
             });
         }
 
@@ -151,16 +172,16 @@ namespace Chess_UWP.Infrastructure
 
         public void DoActionByPositions(Point position)
         {
-            if (currentlySelectedFigure != null)
+            if (CurrentlySelectedFigure != null)
             {
-                TryToMoveTo(currentlySelectedFigure, position);
+                TryToMoveTo(CurrentlySelectedFigure, position);
+                CurrentlySelectedFigure = null;
             }
 
             FigureState figure = GetCurrentPlayerFigureByPosition(position);
             if (figure != null)
             {
-                currentlySelectedFigure = figure;
-                currentlySelectedFigure.Selected = true;
+                CurrentlySelectedFigure = figure;
             }
         }
 
@@ -293,10 +314,9 @@ namespace Chess_UWP.Infrastructure
 
         private void ResetState()
         {
-            if (currentlySelectedFigure != null)
+            if (CurrentlySelectedFigure != null)
             {
-                currentlySelectedFigure.Selected = false;
-                currentlySelectedFigure = null;
+                CurrentlySelectedFigure = null;
             }
 
             ResetTimer();
@@ -311,12 +331,12 @@ namespace Chess_UWP.Infrastructure
 
         private bool CheckIfTryingToCastle(Point position)
         {
-            if (!(currentlySelectedFigure.Figure is King))
+            if (!(CurrentlySelectedFigure.Figure is King))
             {
                 return false;
             }
 
-            return castlingConditions.ContainsKey(new Tuple<FigureState, Point>(currentlySelectedFigure, position));
+            return castlingConditions.ContainsKey(new Tuple<FigureState, Point>(CurrentlySelectedFigure, position));
         }
 
         private FigureState GetRookForCastling(bool isKingSide, int yPos)
@@ -327,7 +347,7 @@ namespace Chess_UWP.Infrastructure
 
         private Tuple<FigureState, Point> GetCastlingRook(Point position)
         {
-            return castlingConditions[new Tuple<FigureState, Point>(currentlySelectedFigure, position)];
+            return castlingConditions[new Tuple<FigureState, Point>(CurrentlySelectedFigure, position)];
         }
 
         private IEnumerable<Point> GetCastlingPositions(FigureState kingOnBoard)
@@ -614,17 +634,15 @@ namespace Chess_UWP.Infrastructure
             else if (type == typeof(Bishop)) figure = new Bishop();
             else if (type == typeof(Queen)) figure = new Queen();
             else return;
-
-            FigureState newFigure = new FigureState(figure, pawn.Position, pawn.Color);
-            newFigure.Figure.Image = ImagesInitializer.GetImage(type, newFigure.Color);
-            AddFigure(newFigure);
+            
+            AddFigure(figure, pawn.Position, pawn.Color);
             RemoveFigure(pawn);
         }
 
         public void PromotePawn(string type)
         {
             Type selectedType = Type.GetType($"Chess_UWP.Models.Figures.{type}");
-            PromotePawnWith(currentlySelectedFigure, selectedType);
+            PromotePawnWith(CurrentlySelectedFigure, selectedType);
             MoveFinalizer();
         }
 
@@ -647,7 +665,7 @@ namespace Chess_UWP.Infrastructure
         private bool CheckEnPassant(Point potentialPosition)
         {
             return enPassantPawn != null &&
-                currentlySelectedFigure.Figure is Pawn &&
+                CurrentlySelectedFigure.Figure is Pawn &&
                 potentialPosition == enPassantPosition;
         }
 
