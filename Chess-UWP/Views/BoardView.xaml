@@ -44,7 +44,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <controls:FigureControl cl:Bind.Model="{Binding}"/>
+                        <controls:FigureView cl:Bind.Model="{Binding}"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

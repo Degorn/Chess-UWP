@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using Chess_UWP.Models.Figures;
+using System;
 using Windows.Foundation;
 using static Chess_UWP.Models.Board;
 
@@ -15,10 +16,16 @@ namespace Chess_UWP.Models
             get => position;
             set
             {
+                PositionChanged?.Invoke(this, EventArgs.Empty);
                 position = value;
                 NotifyOfPropertyChange(() => Position);
+                NotifyOfPropertyChange(() => X);
+                NotifyOfPropertyChange(() => Y);
             }
         }
+
+        public double X => Position.X * 100;
+        public double Y => Position.Y * 100;
 
         public Color Color { get; set; }
 
@@ -39,5 +46,7 @@ namespace Chess_UWP.Models
             Position = position;
             Color = color;
         }
+
+        public event EventHandler PositionChanged;
     }
 }

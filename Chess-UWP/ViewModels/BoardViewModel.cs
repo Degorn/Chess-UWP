@@ -3,9 +3,12 @@ using Chess_UWP.Infrastructure;
 using Chess_UWP.Infrastructure.Initializers;
 using Chess_UWP.Models;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.Foundation;
 using static Chess_UWP.Models.Board;
+using System.Linq;
 
 namespace Chess_UWP.ViewModels
 {
@@ -24,8 +27,8 @@ namespace Chess_UWP.ViewModels
             }
         }
 
-        private ObservableCollection<FigureState> figures = new ObservableCollection<FigureState>();
-        public ObservableCollection<FigureState> Figures
+        private ObservableCollection<FigureViewModel> figures = new ObservableCollection<FigureViewModel>();
+        public ObservableCollection<FigureViewModel> Figures
         {
             get => figures;
             set
@@ -91,7 +94,15 @@ namespace Chess_UWP.ViewModels
             gameProvider.StartPawnPromotion += StartPawnPromition;
             gameProvider.GameOver += GameOver;
 
-            Figures = new ObservableCollection<FigureState>(gameProvider.GetFigures());
+            Figures = new ObservableCollection<FigureViewModel>();
+            IEnumerable<FigureState> figures = gameProvider.GetFigures();
+            foreach (FigureState figure in figures)
+            {
+                Figures.Add(new FigureViewModel
+                {
+                    FigureState = figure
+                });
+            }
             PawnPromotionTypes = new ObservableCollection<string>(gameProvider.GetPawnPromotionTypes());
 
             gameProvider.SetTimerOnMove(Parameter?.SecondsOnTurn ?? 0);
@@ -109,10 +120,13 @@ namespace Chess_UWP.ViewModels
             switch (e.Operation)
             {
                 case ListChagesOperation.Add:
-                    Figures.Add((FigureState)e.Item);
+                    Figures.Add(new FigureViewModel()
+                    {
+                        FigureState = (FigureState)e.Item
+                    });
                     break;
                 case ListChagesOperation.Remove:
-                    Figures.Remove((FigureState)e.Item);
+                    Figures.Remove(Figures.First(f => f.FigureState == (FigureState)e.Item));
                     break;
                 default:
                     break;

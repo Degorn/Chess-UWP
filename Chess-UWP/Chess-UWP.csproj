@@ -95,8 +95,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\FigureControl.xaml.cs">
-      <DependentUpon>FigureControl.xaml</DependentUpon>
+    <Compile Include="Controls\FigureView.xaml.cs">
+      <DependentUpon>FigureView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\CellsInitializer.cs" />
     <Compile Include="Infrastructure\Converters\BoolToBorderThickness.cs" />
@@ -116,7 +116,8 @@
     <Compile Include="Models\Figures\Queen.cs" />
     <Compile Include="Models\GameStartSettings.cs" />
     <Compile Include="ViewModels\BoardViewModel.cs" />
-    <Compile Include="ViewModels\FigureStateViewModel.cs" />
+    <Compile Include="ViewModels\FigureControlViewModel.cs" />
+    <Compile Include="ViewModels\FigureViewModel.cs" />
     <Compile Include="ViewModels\MainMenuViewModel.cs" />
     <Compile Include="Models\Board.cs" />
     <Compile Include="Models\BoardCell.cs" />
@@ -177,7 +178,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Controls\FigureControl.xaml">
+    <Page Include="Controls\FigureView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
