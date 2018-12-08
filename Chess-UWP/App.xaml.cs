@@ -7,12 +7,14 @@ using System.Collections.Generic;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 
 namespace Chess_UWP
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
+    [Bindable]
     sealed partial class App
     {
         private WinRTContainer container;

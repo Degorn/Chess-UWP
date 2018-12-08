@@ -2,17 +2,12 @@
 using Chess_UWP.Infrastructure.Initializers;
 using Chess_UWP.Models;
 using Chess_UWP.Models.Figures;
-using Chess_UWP.Tests.FiguresInitializators;
-using Chess_UWP.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using Windows.Foundation;
-using Windows.UI.Xaml.Media;
 using static Chess_UWP.Models.Board;
 
 namespace Chess_UWP.Tests
