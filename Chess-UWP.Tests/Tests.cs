@@ -2,17 +2,13 @@
 using Chess_UWP.Infrastructure.Initializers;
 using Chess_UWP.Models;
 using Chess_UWP.Models.Figures;
-using Chess_UWP.Tests.FiguresInitializators;
-using Chess_UWP.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Windows.Foundation;
-using Windows.UI.Xaml.Media;
 using static Chess_UWP.Models.Board;
 
 namespace Chess_UWP.Tests
@@ -376,6 +372,48 @@ namespace Chess_UWP.Tests
                 new FigureState(new Rook(), new Point(1, 0), Color.Black),
                 new FigureState(new Rook(), new Point(1, 1), Color.Black)
             }, GameProvider.CheckmateState.Checkmate, "Checkmate with two rooks");
+
+            CheckCheckmateState(new FigureState[]
+            {
+                new FigureState(new King(), new Point(4, 0), Color.White),
+                new FigureState(new Pawn(true), new Point(3, 1), Color.Black),
+                new FigureState(new Pawn(true), new Point(4, 1), Color.Black),
+                new FigureState(new King(), new Point(4, 2), Color.Black)
+            }, GameProvider.CheckmateState.Checkmate, "Two pawn checkmate");
+
+            CheckCheckmateState(new FigureState[]
+            {
+                new FigureState(new King(), new Point(6, 0), Color.White),
+                new FigureState(new Rook(), new Point(5, 0), Color.White),
+                new FigureState(new Pawn(), new Point(5, 1), Color.White),
+                new FigureState(new Pawn(), new Point(7, 1), Color.White),
+                new FigureState(new Queen(), new Point(6, 1), Color.Black),
+                new FigureState(new Bishop(), new Point(0, 7), Color.Black)
+            }, GameProvider.CheckmateState.Checkmate, "Diagonal checkmate");
+
+            CheckCheckmateState(new FigureState[]
+            {
+                new FigureState(new King(), new Point(0, 0), Color.White),
+                new FigureState(new Rook(), new Point(1, 0), Color.White),
+                new FigureState(new Pawn(), new Point(0, 1), Color.White),
+                new FigureState(new Pawn(), new Point(1, 1), Color.White),
+                new FigureState(new Knight(), new Point(2, 1), Color.Black),
+            }, GameProvider.CheckmateState.Checkmate, "Smothered checkmate");
+
+            CheckCheckmateState(new FigureState[]
+            {
+                new FigureState(new King(), new Point(0, 0), Color.White),
+                new FigureState(new Pawn(), new Point(0, 1), Color.White),
+                new FigureState(new Bishop(), new Point(6, 6), Color.Black),
+                new FigureState(new Bishop(), new Point(7, 6), Color.Black),
+            }, GameProvider.CheckmateState.Checkmate, "Two bishop checkmate");
+
+            CheckCheckmateState(new FigureState[]
+            {
+                new FigureState(new King(), new Point(0, 0), Color.White),
+                new FigureState(new Queen(), new Point(1, 1), Color.Black),
+                new FigureState(new King(), new Point(1, 2), Color.Black),
+            }, GameProvider.CheckmateState.Checkmate, "Queen and king checkmate");
         }
 
         [TestMethod]
