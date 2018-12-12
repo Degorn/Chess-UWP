@@ -19,10 +19,10 @@ namespace Chess_UWP.Controls
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             FigureModel = (DataContext as FigureViewModel);
-            FigureModel.Call += FigureModel_Call;
+            FigureModel.Move += FigureModel_Move;
         }
 
-        private void FigureModel_Call(object sender, EventArgs e)
+        private void FigureModel_Move(object sender, EventArgs e)
         {
              MyStoryboard.Begin();
         }

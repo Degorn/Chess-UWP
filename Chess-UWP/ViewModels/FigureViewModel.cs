@@ -20,9 +20,10 @@ namespace Chess_UWP.ViewModels
 
         private void FigureState_PositionChanged(object sender, EventArgs e)
         {
-            Call?.Invoke(null, EventArgs.Empty);
+            Move?.Invoke(null, EventArgs.Empty);
+            NotifyOfPropertyChange(() => FigureState);
         }
 
-        public event EventHandler Call;
+        public event EventHandler Move;
     }
 }

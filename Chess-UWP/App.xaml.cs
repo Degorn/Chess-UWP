@@ -39,7 +39,6 @@ namespace Chess_UWP
                 PerRequest<SettingsViewModel>().
                 PerRequest<NewGameSettingsViewModel>().
                 PerRequest<BoardViewModel>().
-                PerRequest<FigureControlViewModel>().
                 PerRequest<FigureViewModel>().
                 Singleton<IFiguresImagesInitializer, FiguresimagesInitializerDefault>().
                 Singleton<IFiguresInitializer, FiguresInitializer>();

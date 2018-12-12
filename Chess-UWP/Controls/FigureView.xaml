@@ -5,9 +5,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:Chess_UWP.Infrastructure.Converters"
-    xmlns:models="using:Chess_UWP.Models"
-    xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
-    xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
     mc:Ignorable="d"
     d:DesignHeight="100"
     d:DesignWidth="100" Loaded="UserControl_Loaded">
@@ -16,15 +13,16 @@
         <local:UriToBitmapImageConverter x:Key="UriToBitmapImageConverter"/>
         <local:PositionToMarginConverter x:Key="PositionToMarginConverter"/>
         <local:BoolToBorderThickness x:Key="BoolToBorderThickness"/>
+        <local:PositionPointToWorldCoordinatesConverter x:Key="PointToWorldConverter"/>
 
         <Storyboard x:Name="MyStoryboard">
             <DoubleAnimation Storyboard.TargetName="FigurePosition"
                              Storyboard.TargetProperty="X"
-                             To="{Binding FigureState.X}"
+                             To="{Binding FigureState.Position.X, Converter={StaticResource PointToWorldConverter}}"
                              Duration="0:0:0.5"/>
             <DoubleAnimation Storyboard.TargetName="FigurePosition"
                              Storyboard.TargetProperty="Y"
-                             To="{Binding FigureState.Y}"
+                             To="{Binding FigureState.Position.Y, Converter={StaticResource PointToWorldConverter}}"
                              Duration="0:0:0.5"/>
         </Storyboard>
     </UserControl.Resources>
@@ -32,7 +30,9 @@
     <ContentControl x:Name="FigureState"
                     Width="100">
         <ContentControl.RenderTransform>
-            <TranslateTransform x:Name="FigurePosition" X="{Binding FigureState.X}" Y="{Binding FigureState.Y}"/>
+            <TranslateTransform x:Name="FigurePosition"
+                                X="{Binding FigureState.Position.X, Converter={StaticResource PointToWorldConverter}}"
+                                Y="{Binding FigureState.Position.Y, Converter={StaticResource PointToWorldConverter}}"/>
         </ContentControl.RenderTransform>
         <Border BorderBrush="Green"
                 BorderThickness="{Binding FigureState.Selected, Converter={StaticResource BoolToBorderThickness}}">
