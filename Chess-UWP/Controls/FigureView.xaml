@@ -21,11 +21,11 @@
             <DoubleAnimation Storyboard.TargetName="FigurePosition"
                              Storyboard.TargetProperty="X"
                              To="{Binding FigureState.X}"
-                             Duration="0:0:1"/>
+                             Duration="0:0:0.5"/>
             <DoubleAnimation Storyboard.TargetName="FigurePosition"
                              Storyboard.TargetProperty="Y"
                              To="{Binding FigureState.Y}"
-                             Duration="0:0:1"/>
+                             Duration="0:0:0.5"/>
         </Storyboard>
     </UserControl.Resources>
 
