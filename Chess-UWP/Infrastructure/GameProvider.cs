@@ -603,7 +603,7 @@ namespace Chess_UWP.Infrastructure
                         }
 
                         enemyFiguresDirections[(int)potentialPosition.Y, (int)potentialPosition.X]++;
-                        if (figureOnPosition != null && potentialPosition == potentialFigurePosition)
+                        if (potentialPosition == potentialFigurePosition)
                         {
                             break;
                         }
