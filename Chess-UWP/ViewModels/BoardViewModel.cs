@@ -3,7 +3,6 @@ using Chess_UWP.Infrastructure;
 using Chess_UWP.Infrastructure.Initializers;
 using Chess_UWP.Models;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.Foundation;

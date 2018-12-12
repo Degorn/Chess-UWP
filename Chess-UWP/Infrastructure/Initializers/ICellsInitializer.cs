@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Chess_UWP.Models;
 
-namespace Chess_UWP.Infrastructure
+namespace Chess_UWP.Infrastructure.Initializers
 {
     public interface ICellsInitializer
     {

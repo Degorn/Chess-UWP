@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Windows.UI;
 using Windows.Foundation;
 
-namespace Chess_UWP.Infrastructure
+namespace Chess_UWP.Infrastructure.Initializers
 {
     public class CellsInitializer : ICellsInitializer
     {

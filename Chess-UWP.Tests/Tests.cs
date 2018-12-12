@@ -419,19 +419,19 @@ namespace Chess_UWP.Tests
         [TestMethod]
         public void CheckSafetyFigureMovement_Test()
         {
-            //FigurePossiblePositions(new Dictionary<FigureState, List<Point>>()
-            //{
-            //    { new FigureState(new King(), new Point(0, 0), Color.White), null },
-            //    { new FigureState(new Pawn(), new Point(1, 1), Color.White), new List<Point>{ } },
-            //    { new FigureState(new Bishop(), new Point(3, 3), Color.Black), null }
-            //}, "Pawn should not be possible to move");
+            FigurePossiblePositions(new Dictionary<FigureState, List<Point>>()
+            {
+                { new FigureState(new King(), new Point(0, 0), Color.White), null },
+                { new FigureState(new Pawn(), new Point(1, 1), Color.White), new List<Point>{ } },
+                { new FigureState(new Bishop(), new Point(3, 3), Color.Black), null }
+            }, "Pawn should not be possible to move");
 
-            //FigurePossiblePositions(new Dictionary<FigureState, List<Point>>()
-            //{
-            //    { new FigureState(new King(), new Point(0, 0), Color.White), null },
-            //    { new FigureState(new Pawn(), new Point(1, 1), Color.White), new List<Point>{ new Point(2, 2) } },
-            //    { new FigureState(new Bishop(), new Point(2, 2), Color.Black), null }
-            //}, "Pawn should be only possible to beat the bishop");
+            FigurePossiblePositions(new Dictionary<FigureState, List<Point>>()
+            {
+                { new FigureState(new King(), new Point(0, 0), Color.White), null },
+                { new FigureState(new Pawn(), new Point(1, 1), Color.White), new List<Point>{ new Point(2, 2) } },
+                { new FigureState(new Bishop(), new Point(2, 2), Color.Black), null }
+            }, "Pawn should be only possible to beat the bishop");
 
             FigurePossiblePositions(new Dictionary<FigureState, List<Point>>()
             {

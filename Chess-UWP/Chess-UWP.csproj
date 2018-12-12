@@ -98,13 +98,13 @@
     <Compile Include="Controls\FigureView.xaml.cs">
       <DependentUpon>FigureView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Infrastructure\CellsInitializer.cs" />
+    <Compile Include="Infrastructure\Initializers\CellsInitializer.cs" />
     <Compile Include="Infrastructure\Converters\BoolToBorderThickness.cs" />
     <Compile Include="Infrastructure\Converters\ColorToSolidColorBrushConverter.cs" />
     <Compile Include="Infrastructure\Converters\PositionToMarginConverter.cs" />
     <Compile Include="Infrastructure\Converters\UriToBitmapImageConverter.cs" />
     <Compile Include="Infrastructure\Events.cs" />
-    <Compile Include="Infrastructure\ICellsInitializer.cs" />
+    <Compile Include="Infrastructure\Initializers\ICellsInitializer.cs" />
     <Compile Include="Infrastructure\IGameProvider.cs" />
     <Compile Include="Infrastructure\Initializers\FiguresImagesInitializerDefault.cs" />
     <Compile Include="Infrastructure\Initializers\FiguresInitializer.cs" />
