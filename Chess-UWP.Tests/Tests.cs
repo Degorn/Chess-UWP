@@ -319,6 +319,13 @@ namespace Chess_UWP.Tests
             CheckCheckmateState(new FigureState[]
             {
                 new FigureState(new King(), new Point(0, 0), Color.White),
+                new FigureState(new Pawn(), new Point(1, 1), Color.White),
+                new FigureState(new Bishop(), new Point(4, 4), Color.Black),
+            }, GameProvider.CheckmateState.None, "Without check");
+
+            CheckCheckmateState(new FigureState[]
+            {
+                new FigureState(new King(), new Point(0, 0), Color.White),
                 new FigureState(new Rook(), new Point(2, 0), Color.Black),
             }, GameProvider.CheckmateState.Check, "Check with rook");
 
@@ -437,10 +444,10 @@ namespace Chess_UWP.Tests
             {
                 { new FigureState(new King(), new Point(0, 0), Color.White), null },
                 { new FigureState(new Pawn(), new Point(0, 1), Color.White), null },
-                { new FigureState(new Pawn(), new Point(1, 1), Color.White), null },
+                { new FigureState(new Pawn(), new Point(1, 2), Color.White), null },
                 { new FigureState(new Pawn(), new Point(2, 1), Color.White), new List<Point>{ new Point(2, 2) } },
                 { new FigureState(new Queen(), new Point(4, 4), Color.Black), null }
-            }, "Pawn should be only possible to beat the bishop");
+            }, "Pawn should be only possible to block the king");
         }
     }
 }
