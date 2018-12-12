@@ -107,7 +107,7 @@ namespace Chess_UWP.Infrastructure
             return FiguresOnBoard;
         }
 
-        private IEnumerable<Direction> GetFigureDirections(FigureState figure, bool isPotentialCalculation = false)
+        private IEnumerable<Direction> GetFigureDirections(FigureState figure, bool includeCheckmateState = true)
         {
             IEnumerable<Direction> figureDirections = figure.Figure.PossiblePositionsToMove();
 
@@ -124,11 +124,8 @@ namespace Chess_UWP.Infrastructure
                     FigureState figureOnPosition = GetFigureByPosition(potentialPosition);
 
                     if (potentialPosition.CheckIfOutsideTheBoard() ||
-                        figureOnPosition?.Color == figure.Color)
-                    {
-                        break;
-                    }
-                    else if (!isPotentialCalculation && CheckCheckStateAfterMove(figure, potentialPosition))
+                        figureOnPosition?.Color == figure.Color ||
+                        includeCheckmateState && !CheckIfMoveIsSaveForKing(figure, potentialPosition))
                     {
                         break;
                     }
@@ -151,9 +148,9 @@ namespace Chess_UWP.Infrastructure
             }
         }
 
-        public IEnumerable<Point> GetPossibleFigurePositions(FigureState figure, bool isPotentialCalculation = false)
+        public IEnumerable<Point> GetPossibleFigurePositions(FigureState figure, bool includeCheckmateState = true)
         {
-            IEnumerable<Direction> directions = GetFigureDirections(figure, isPotentialCalculation);
+            IEnumerable<Direction> directions = GetFigureDirections(figure, includeCheckmateState);
             foreach (Direction direction in directions)
             {
                 foreach (Point position in direction.Positions)
@@ -427,7 +424,7 @@ namespace Chess_UWP.Infrastructure
         {
             foreach (FigureState figure in FiguresOnBoard.Where(f => f.Color == color && f.Figure.GetType() != typeof(King)))
             {
-                foreach (Direction direction in GetFigureDirections(figure, true))
+                foreach (Direction direction in GetFigureDirections(figure, false))
                 {
                     yield return direction;
                 }
@@ -510,11 +507,11 @@ namespace Chess_UWP.Infrastructure
             }
 
             // Check if the king can move in a safe place.
-            IEnumerable<Point> possiblePositionsOfKing = GetPossibleFigurePositions(kingOfTheCurrentPlayer, true);
+            IEnumerable<Point> possiblePositionsOfKing = GetPossibleFigurePositions(kingOfTheCurrentPlayer, false);
             IEnumerable<Point> enemyDirectionsPositions = GetAllFiguresPositionsByColor(EnemyPlayer.Color);
             foreach (Point kingPosition in possiblePositionsOfKing)
             {
-                if (!enemyDirectionsPositions.Contains(kingPosition) && !CheckCheckStateAfterMove(kingOfTheCurrentPlayer, kingPosition))
+                if (!enemyDirectionsPositions.Contains(kingPosition) && CheckIfMoveIsSaveForKing(kingOfTheCurrentPlayer, kingPosition))
                 {
                     return false;
                 }
@@ -562,37 +559,60 @@ namespace Chess_UWP.Infrastructure
             return !remainingPositions.Contains(target);
         }
 
-        /// <summary>
-        /// Block a figure’s ability to move if this leads to a check.
-        /// </summary>
-        /// <param name="figure">Figure to move.</param>
-        /// <param name="potentialPosition">Potential position of a figure.</param>
-        /// <returns>True if movement leads to a check.</returns>
-        private bool CheckCheckStateAfterMove(FigureState figure, Point potentialPosition)
+        private bool CheckIfMoveIsSaveForKing(FigureState figureToMove, Point potentialFigurePosition)
         {
-            FigureState kingOfCurrentPlayer = GetKing(CurrentPlayer.Color);
-            if (kingOfCurrentPlayer == null)
+            FigureState king = GetKing(CurrentPlayer.Color);
+            if (king == null)
             {
-                return false;
+                return true;
+            }
+            Point kingPosition = figureToMove.Figure is King ? potentialFigurePosition : king.Position;
+
+            int[,] enemyFiguresDirections = new int[8, 8];
+            IEnumerable<FigureState> enemyFigures = FiguresOnBoard.Where(f => f.Color == EnemyPlayer.Color);
+            if (enemyFigures == null)
+            {
+                return true;
+            }
+            foreach (FigureState figure in enemyFigures)
+            {
+                IEnumerable<Direction> figureDirections = figure.Figure.PossiblePositionsToMove();
+                foreach (Direction direction in figureDirections)
+                {
+                    if (figure.Position == potentialFigurePosition)
+                    {
+                        break;
+                    }
+
+                    foreach (Point vector in direction.Positions)
+                    {
+                        Point potentialPosition = figure.Position.Add(vector);
+                        FigureState figureOnPosition = GetFigureByPosition(potentialPosition);
+                        if (figureToMove.Position == potentialPosition)
+                        {
+                            figureOnPosition = null;
+                        }
+
+                        if (figure.Figure is Pawn && potentialPosition.Subtract(figure.Position).X == 0)
+                        {
+                            break;
+                        }
+                        if (potentialPosition.CheckIfOutsideTheBoard())
+                        {
+                            break;
+                        }
+
+                        enemyFiguresDirections[(int)potentialPosition.Y, (int)potentialPosition.X]++;
+                        if (figureOnPosition != null && potentialPosition == potentialFigurePosition)
+                        {
+                            break;
+                        }
+                    }
+
+                }
             }
 
-            FigureState figureOnPotentialPosition = GetFigureByPosition(potentialPosition);
-            if (figureOnPotentialPosition != null)
-            {
-                FiguresOnBoard.Remove(figureOnPotentialPosition);
-            }
-
-            Point currentPosition = figure.Position;
-            figure.Position = potentialPosition;
-            bool result = ChechCheckState();
-            figure.Position = currentPosition;
-
-            if (figureOnPotentialPosition != null)
-            {
-                FiguresOnBoard.Add(figureOnPotentialPosition);
-            }
-
-            return result;
+            return enemyFiguresDirections[(int)kingPosition.Y, (int)kingPosition.X] == 0;
         }
 
         #endregion

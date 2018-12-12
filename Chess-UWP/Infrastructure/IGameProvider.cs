@@ -15,7 +15,7 @@ namespace Chess_UWP.Infrastructure
         IEnumerable<FigureState> GetFigures();
         void ResetFigures(IEnumerable<FigureState> figures);
         void DoActionByPositions(Point position);
-        IEnumerable<Point> GetPossibleFigurePositions(FigureState figure, bool isPotentialCalculation = false);
+        IEnumerable<Point> GetPossibleFigurePositions(FigureState figure, bool includeCheckmateState);
 
         GameProvider.CheckmateState GetCheckmateState();
         IEnumerable<string> GetPawnPromotionTypes();
