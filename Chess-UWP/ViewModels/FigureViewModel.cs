@@ -18,10 +18,14 @@ namespace Chess_UWP.ViewModels
             }
         }
 
+        public double XPos => FigureState.Position.X * Board.CELL_SIZE;
+        public double YPos => FigureState.Position.Y * Board.CELL_SIZE;
+
         private void FigureState_PositionChanged(object sender, EventArgs e)
         {
             Move?.Invoke(null, EventArgs.Empty);
-            NotifyOfPropertyChange(() => FigureState);
+            NotifyOfPropertyChange(() => XPos);
+            NotifyOfPropertyChange(() => YPos);
         }
 
         public event EventHandler Move;

@@ -13,26 +13,25 @@
         <local:UriToBitmapImageConverter x:Key="UriToBitmapImageConverter"/>
         <local:PositionToMarginConverter x:Key="PositionToMarginConverter"/>
         <local:BoolToBorderThickness x:Key="BoolToBorderThickness"/>
-        <local:PositionPointToWorldCoordinatesConverter x:Key="PointToWorldConverter"/>
 
         <Storyboard x:Name="MyStoryboard">
             <DoubleAnimation Storyboard.TargetName="FigurePosition"
                              Storyboard.TargetProperty="X"
-                             To="{Binding FigureState.Position.X, Converter={StaticResource PointToWorldConverter}}"
+                             To="{Binding XPos}"
                              Duration="0:0:0.5"/>
             <DoubleAnimation Storyboard.TargetName="FigurePosition"
                              Storyboard.TargetProperty="Y"
-                             To="{Binding FigureState.Position.Y, Converter={StaticResource PointToWorldConverter}}"
+                             To="{Binding YPos}"
                              Duration="0:0:0.5"/>
         </Storyboard>
     </UserControl.Resources>
-
+    
     <ContentControl x:Name="FigureState"
                     Width="100">
         <ContentControl.RenderTransform>
             <TranslateTransform x:Name="FigurePosition"
-                                X="{Binding FigureState.Position.X, Converter={StaticResource PointToWorldConverter}}"
-                                Y="{Binding FigureState.Position.Y, Converter={StaticResource PointToWorldConverter}}"/>
+                                X="{Binding XPos}"
+                                Y="{Binding YPos}"/>
         </ContentControl.RenderTransform>
         <Border BorderBrush="Green"
                 BorderThickness="{Binding FigureState.Selected, Converter={StaticResource BoolToBorderThickness}}">

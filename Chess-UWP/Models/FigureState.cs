@@ -16,9 +16,9 @@ namespace Chess_UWP.Models
             get => position;
             set
             {
-                PositionChanged?.Invoke(this, EventArgs.Empty);
                 position = value;
                 NotifyOfPropertyChange(() => Position);
+                PositionChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 

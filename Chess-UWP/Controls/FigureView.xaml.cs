@@ -24,7 +24,7 @@ namespace Chess_UWP.Controls
 
         private void FigureModel_Move(object sender, EventArgs e)
         {
-             MyStoryboard.Begin();
+            MyStoryboard.Begin();
         }
     }
 }
