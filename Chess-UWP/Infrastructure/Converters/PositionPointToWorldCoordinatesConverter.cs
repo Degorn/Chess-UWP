@@ -1,19 +1,16 @@
 ﻿using Chess_UWP.Models;
 using System;
-using Windows.Foundation;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
 namespace Chess_UWP.Infrastructure.Converters
 {
-    class PositionToMarginConverter : IValueConverter
+    class PositionPointToWorldCoordinatesConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is Point position)
+            if (value is double position)
             {
-                int cellSize = Board.CELL_SIZE;
-                return new Thickness((int)position.X * cellSize, (int)position.Y * cellSize, 0, 0);
+                return position * Board.CELL_SIZE;
             }
 
             return null;

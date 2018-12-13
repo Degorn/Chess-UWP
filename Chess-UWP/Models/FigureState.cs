@@ -19,13 +19,8 @@ namespace Chess_UWP.Models
                 PositionChanged?.Invoke(this, EventArgs.Empty);
                 position = value;
                 NotifyOfPropertyChange(() => Position);
-                NotifyOfPropertyChange(() => X);
-                NotifyOfPropertyChange(() => Y);
             }
         }
-
-        public double X => Position.X * 100;
-        public double Y => Position.Y * 100;
 
         public Color Color { get; set; }
 
