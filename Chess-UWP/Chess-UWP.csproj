@@ -116,7 +116,6 @@
     <Compile Include="Models\Figures\Queen.cs" />
     <Compile Include="Models\GameStartSettings.cs" />
     <Compile Include="ViewModels\BoardViewModel.cs" />
-    <Compile Include="ViewModels\FigureControlViewModel.cs" />
     <Compile Include="ViewModels\FigureViewModel.cs" />
     <Compile Include="ViewModels\MainMenuViewModel.cs" />
     <Compile Include="Models\Board.cs" />
