@@ -5,16 +5,19 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:Chess_UWP.Infrastructure.Converters"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:media="using:Microsoft.Xaml.Interactions.Media"
     mc:Ignorable="d"
     d:DesignHeight="100"
-    d:DesignWidth="100" Loaded="UserControl_Loaded">
+    d:DesignWidth="100">
 
     <UserControl.Resources>
         <local:UriToBitmapImageConverter x:Key="UriToBitmapImageConverter"/>
         <local:PositionToMarginConverter x:Key="PositionToMarginConverter"/>
         <local:BoolToBorderThickness x:Key="BoolToBorderThickness"/>
 
-        <Storyboard x:Name="MyStoryboard">
+        <Storyboard x:Name="MoveAnimation">
             <DoubleAnimation Storyboard.TargetName="FigurePosition"
                              Storyboard.TargetProperty="X"
                              To="{Binding XPos}"
@@ -25,7 +28,14 @@
                              Duration="0:0:0.5"/>
         </Storyboard>
     </UserControl.Resources>
-    
+
+    <interactivity:Interaction.Behaviors>
+        <core:DataTriggerBehavior Binding="{Binding PositionChangedTrigger}"
+                                  Value="{Binding PositionChangedTrigger}">
+            <media:ControlStoryboardAction Storyboard="{StaticResource MoveAnimation}"/>
+        </core:DataTriggerBehavior>
+    </interactivity:Interaction.Behaviors>
+
     <ContentControl x:Name="FigureState"
                     Width="100">
         <ContentControl.RenderTransform>
