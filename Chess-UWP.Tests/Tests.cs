@@ -30,12 +30,7 @@ namespace Chess_UWP.Tests
 
         private void FigurePossiblePositions(Dictionary<FigureState, List<Point>> figuresWithPossiblePositions, string assertMessage = "")
         {
-            ObservableCollection<FigureState> figures = new ObservableCollection<FigureState>();
-            foreach (FigureState figure in figuresWithPossiblePositions.Keys)
-            {
-                figures.Add(figure);
-            }
-            gameProvider.ResetFigures(figures);
+            gameProvider.ResetFigures(figuresWithPossiblePositions.Keys);
 
             foreach (KeyValuePair<FigureState, List<Point>> figure in figuresWithPossiblePositions)
             {
@@ -80,6 +75,55 @@ namespace Chess_UWP.Tests
 
             GameProvider.CheckmateState actualState = gameProvider.GetCheckmateState();
             Assert.AreEqual(expectedState, actualState, assertMessage);
+        }
+
+        private void FigurePossiblePositions(FigureState figure, IEnumerable<Point> expectedPositions, string assertMessage = "")
+        {
+            gameProvider.ResetFigures(new FigureState[] { figure });
+
+            IEnumerable<Point> actualPositions = gameProvider.GetPossibleFigurePositions(figure);
+
+            CollectionAssert.AreEquivalent(expectedPositions.ToList(), actualPositions.ToList());
+        }
+
+        #endregion
+
+        #region Pawn possible positions
+
+        [TestMethod]
+        [TestCategory("Pawns downward")]
+        public void GetPossibleFigurePositions_PawnDownward_ReturnsCurrectPositions_0()
+        {
+            FigurePossiblePositions(
+                new FigureState(new Pawn(false), new Point(0, 0)),
+                new Point[] { new Point(0, 1), new Point(0, 2) });
+        }
+
+        [TestMethod]
+        [TestCategory("Pawns downward")]
+        public void GetPossibleFigurePositions_PawnDownward_ReturnsCurrectPositions_1()
+        {
+            FigurePossiblePositions(
+                new FigureState(new Pawn(false), new Point(1, 1)),
+                new Point[] { new Point(1, 2), new Point(1, 3) });
+        }
+
+        [TestMethod]
+        [TestCategory("Pawns downward")]
+        public void GetPossibleFigurePositions_PawnDownward_ReturnsCurrectPositions_2()
+        {
+            FigurePossiblePositions(
+                new FigureState(new Pawn(false), new Point(2, 6)),
+                new Point[] { new Point(2, 7) });
+        }
+
+        [TestMethod]
+        [TestCategory("Pawns downward")]
+        public void GetPossibleFigurePositions_PawnDownward_ReturnsCurrectPositions_3()
+        {
+            FigurePossiblePositions(
+                new FigureState(new Pawn(false), new Point(3, 7)),
+                new Point[] { });
         }
 
         #endregion
