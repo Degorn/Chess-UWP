@@ -21,13 +21,22 @@ namespace Chess_UWP.ViewModels
         public double XPos => FigureState.Position.X * Board.CELL_SIZE;
         public double YPos => FigureState.Position.Y * Board.CELL_SIZE;
 
+        private bool positionChangedTrigger;
+        public bool PositionChangedTrigger
+        {
+            get { return positionChangedTrigger; }
+            set
+            {
+                positionChangedTrigger = value;
+                NotifyOfPropertyChange(() => PositionChangedTrigger);
+            }
+        }
+
         private void FigureState_PositionChanged(object sender, EventArgs e)
         {
-            Move?.Invoke(null, EventArgs.Empty);
+            PositionChangedTrigger = !PositionChangedTrigger;
             NotifyOfPropertyChange(() => XPos);
             NotifyOfPropertyChange(() => YPos);
         }
-
-        public event EventHandler Move;
     }
 }
