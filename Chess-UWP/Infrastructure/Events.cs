@@ -16,6 +16,7 @@ namespace Chess_UWP.Infrastructure
     public class GameOverEventArgs : EventArgs
     {
         public Player Winner { get; set; }
+        public string GameLength { get; set; }
     }
 
     public class TimerTickEventArgs : EventArgs

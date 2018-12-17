@@ -21,7 +21,7 @@ namespace Chess_UWP.Infrastructure
         IEnumerable<string> GetPawnPromotionTypes();
         void PromotePawn(string type);
 
-        void SetTimerOnMove(int secondsOnMove);
-        void StartTimer();
+        void SetMoveTimer(int secondsOnMove);
+        void StartMoveTimer();
     }
 }
