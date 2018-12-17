@@ -50,6 +50,8 @@ namespace Chess_UWP.Infrastructure
             ImagesInitializer = imagesInitializer;
             FiguresOnBoard = figuresInitializer.GetFigures(imagesInitializer).ToList();
             syncContext = SynchronizationContext.Current;
+
+            StartGameTimer();
         }
 
         public GameProvider(IFiguresInitializer figuresInitializer, IFiguresImagesInitializer imagesInitializer, Player[] players) : this(figuresInitializer, imagesInitializer)
@@ -244,7 +246,8 @@ namespace Chess_UWP.Infrastructure
             {
                 GameOver(this, new GameOverEventArgs
                 {
-                    Winner = EnemyPlayer
+                    Winner = EnemyPlayer,
+                    GameLength = TimeSpan.FromSeconds(gameLengthInSeconds).ToString(@"hh\:mm\:ss")
                 });
             }
 
@@ -316,7 +319,7 @@ namespace Chess_UWP.Infrastructure
                 CurrentlySelectedFigure = null;
             }
 
-            ResetTimer();
+            ResetMoveTimer();
         }
 
         #endregion
@@ -700,14 +703,17 @@ namespace Chess_UWP.Infrastructure
 
         #region Timer
 
+        private Timer gameTimer;
+        private int gameLengthInSeconds;
+
         private SynchronizationContext syncContext;
-        private Timer timer;
+        private Timer moveTimer;
         public int SecondsOnMove { get; private set; }
         private int secondsLeft;
 
         public event TimerTickDelegate TimerTick;
 
-        private void OnTick(object state)
+        private void MoveTimerTick(object state)
         {
             syncContext.Post(a =>
             {
@@ -720,12 +726,12 @@ namespace Chess_UWP.Infrastructure
             }, null);
         }
 
-        public void SetTimerOnMove(int secondsOnMove)
+        public void SetMoveTimer(int secondsOnMove)
         {
             SecondsOnMove = secondsOnMove;
         }
 
-        public void StartTimer()
+        public void StartMoveTimer()
         {
             if (SecondsOnMove == 0)
             {
@@ -733,18 +739,34 @@ namespace Chess_UWP.Infrastructure
             }
 
             secondsLeft = SecondsOnMove;
-            timer = new Timer(OnTick, null, 1000, 1000);
+            moveTimer = new Timer(MoveTimerTick, null, 1000, 1000);
         }
 
-        private void StopTimer()
+        private void StopMoveTimer()
         {
-            timer?.Dispose();
+            moveTimer?.Dispose();
         }
 
-        private void ResetTimer()
+        private void ResetMoveTimer()
         {
-            StopTimer();
-            StartTimer();
+            StopMoveTimer();
+            StartMoveTimer();
+        }
+
+        private void StartGameTimer()
+        {
+            gameLengthInSeconds = 0;
+            gameTimer = new Timer(GameTimerTick, null, 1000, 1000);
+        }
+
+        private void GameTimerTick(object state)
+        {
+            gameLengthInSeconds++;
+        }
+
+        private void StopGameTimer()
+        {
+            gameTimer?.Dispose();
         }
 
         #endregion

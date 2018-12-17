@@ -25,7 +25,7 @@ namespace Chess_UWP.Views
 
         private async void GameOver(object sender, GameOverEventArgs e)
         {
-            MessageDialog dialog = new MessageDialog($"Winner: {e.Winner.Name} ({e.Winner.Color})!", "Checkmate! Game over");
+            MessageDialog dialog = new MessageDialog($"Winner: {e.Winner.Name} ({e.Winner.Color})!\nGameLength: {e.GameLength}", "Checkmate! Game over");
             await dialog.ShowAsync();
             Application.Current.Exit();
         }

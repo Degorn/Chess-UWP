@@ -83,8 +83,8 @@ namespace Chess_UWP.ViewModels
 
         protected override void OnActivate()
         {
-            Player playerWhite = new Player(Parameter?.FirstUserName ?? "Player 1", Color.White);
-            Player playerBlack = new Player(Parameter?.SecondUserName ?? "Player 2", Color.Black);
+            Player playerWhite = new Player(string.IsNullOrEmpty(Parameter?.FirstUserName) ? "Player 1" : Parameter.FirstUserName, Color.White);
+            Player playerBlack = new Player(string.IsNullOrEmpty(Parameter?.SecondUserName) ? "Player 2" : Parameter.SecondUserName, Color.Black);
             IFiguresInitializer figuresInitializer = IoC.Get<IFiguresInitializer>();
             IFiguresImagesInitializer figuresImagesInitializer = IoC.Get<IFiguresImagesInitializer>();
 
@@ -104,9 +104,9 @@ namespace Chess_UWP.ViewModels
             }
             PawnPromotionTypes = new ObservableCollection<string>(gameProvider.GetPawnPromotionTypes());
 
-            gameProvider.SetTimerOnMove(Parameter?.SecondsOnTurn ?? 0);
+            gameProvider.SetMoveTimer(Parameter?.SecondsOnTurn ?? 0);
             gameProvider.TimerTick += TimerTick;
-            gameProvider.StartTimer();
+            gameProvider.StartMoveTimer();
         }
 
         private void TimerTick(object sender, TimerTickEventArgs e)
