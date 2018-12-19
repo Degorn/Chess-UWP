@@ -1,7 +1,9 @@
 ﻿using Caliburn.Micro;
+using Chess_UWP.Database;
 using Chess_UWP.Infrastructure.Initializers;
 using Chess_UWP.ViewModels;
 using Chess_UWP.Views;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using Windows.ApplicationModel.Activation;
@@ -27,6 +29,7 @@ namespace Chess_UWP
         {
             Initialize();
             this.InitializeComponent();
+            InitializeDatabase();
         }
 
         protected override void Configure()
@@ -85,5 +88,14 @@ namespace Chess_UWP
         {
             container.BuildUp(instance);
         }
+
+        private void InitializeDatabase()
+        {
+            using (ChessDbContext database = new ChessDbContext())
+            {
+                database.Database.Migrate();
+            }
+        }
+
     }
 }
