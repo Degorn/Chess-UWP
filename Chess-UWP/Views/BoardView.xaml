@@ -24,7 +24,8 @@
 
     <Grid>
         <Grid Width="800" Height="800"
-              BorderThickness="2" BorderBrush="Black">
+              BorderThickness="2" BorderBrush="Black"
+              CornerRadius="4">
             <ItemsControl x:Name="Cells">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
