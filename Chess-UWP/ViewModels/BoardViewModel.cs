@@ -10,6 +10,7 @@ using static Chess_UWP.Models.Board;
 using System.Linq;
 using Chess_UWP.Database;
 using System.Threading.Tasks;
+using Windows.UI.Popups;
 
 namespace Chess_UWP.ViewModels
 {
@@ -141,8 +142,6 @@ namespace Chess_UWP.ViewModels
             }
         }
 
-        public event GameOverDelegate GameOverEvent;
-
         private void CellClick(BoardCell cell)
         {
             Point cellPosition = cell.Position;
@@ -162,7 +161,20 @@ namespace Chess_UWP.ViewModels
 
         private async Task GameOverAsync(object sender, GameOverEventArgs e)
         {
-            await GameOverEvent(sender, e);
+            await ShowGameOverDialogAsync(e);
+            await SaveResultAsync(e);
+
+            pageNavigationService.NavigateToViewModel<MainMenuViewModel>();
+        }
+
+        private async Task ShowGameOverDialogAsync(GameOverEventArgs e)
+        {
+            MessageDialog dialog = new MessageDialog($"Winner: {e.Winner.Name} ({e.Winner.Color})!\nGameLength: {e.GameLength}", "Checkmate! Game over");
+            await dialog.ShowAsync();
+        }
+
+        private async Task SaveResultAsync(GameOverEventArgs e)
+        {
             await repository.AddAsync(new GameInfo
             {
                 FirstPlayerName = playerWhite.Name,
@@ -171,8 +183,6 @@ namespace Chess_UWP.ViewModels
                 Winner = e.Winner.Name,
                 Date = DateTime.Now
             });
-
-            pageNavigationService.NavigateToViewModel<MainMenuViewModel>();
         }
     }
 }

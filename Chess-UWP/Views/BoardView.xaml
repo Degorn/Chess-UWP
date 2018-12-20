@@ -9,7 +9,7 @@
     xmlns:controls="using:Chess_UWP.Controls"
     xmlns:cl="using:Caliburn.Micro"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Height="900" Width="1200" Loaded="Page_Loaded">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Height="900" Width="1200">
 
     <Page.Resources>
         <converters:ColorToSolidColorBrushConverter x:Key="ColorToSolidColorBrushConverter"/>
