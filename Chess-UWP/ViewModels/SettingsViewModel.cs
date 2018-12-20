@@ -1,11 +1,32 @@
 ﻿using Caliburn.Micro;
+using Chess_UWP.Database;
+using System.Collections.Generic;
 
 namespace Chess_UWP.ViewModels
 {
-    class SettingsViewModel : ViewModelBase
+    public class SettingsViewModel : ViewModelBase
     {
-        protected SettingsViewModel(INavigationService pageNavigationService) : base(pageNavigationService)
+        private IEnumerable<GameInfo> gameInfos;
+        public IEnumerable<GameInfo> GameInfos
         {
+            get => gameInfos;
+            set
+            {
+                gameInfos = value;
+                NotifyOfPropertyChange(() => GameInfos);
+            }
+        }
+
+        private IRepository repository;
+
+        public SettingsViewModel(INavigationService pageNavigationService) : base(pageNavigationService)
+        {
+        }
+
+        protected override void OnActivate()
+        {
+            repository = IoC.Get<IRepository>();
+            GameInfos = repository.GetAll();
         }
     }
 }

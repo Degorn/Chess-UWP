@@ -5,10 +5,22 @@
     xmlns:local="using:Chess_UWP.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local1="using:Chess_UWP.Database"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-
+        <ListView x:Name="GameInfos">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="local1:GameInfo">
+                    <StackPanel>
+                        <TextBlock Text="{x:Bind FirstPlayerName}"/>
+                        <TextBlock Text="{x:Bind SecondPlayerName}"/>
+                        <TextBlock Text="{x:Bind GameLength}"/>
+                        <TextBlock Text="{x:Bind Winner}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Page>

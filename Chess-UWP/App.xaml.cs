@@ -72,7 +72,7 @@ namespace Chess_UWP
             if (e.PreviousExecutionState == ApplicationExecutionState.Running)
                 return;
 
-            DisplayRootView<NewGameSettingsView>();
+            DisplayRootView<SettingsView>();
         }
 
 

@@ -72,6 +72,7 @@ namespace Chess_UWP.ViewModels
         public GameStartSettings Parameter { get; set; }
         private IGameProvider gameProvider;
         private IRepository repository;
+        Player playerWhite, playerBlack;
 
         public BoardViewModel(INavigationService pageNavigationService) : base(pageNavigationService)
         {
@@ -84,8 +85,8 @@ namespace Chess_UWP.ViewModels
 
         protected override void OnActivate()
         {
-            Player playerWhite = new Player(string.IsNullOrEmpty(Parameter?.FirstUserName) ? "Player 1" : Parameter.FirstUserName, Color.White);
-            Player playerBlack = new Player(string.IsNullOrEmpty(Parameter?.SecondUserName) ? "Player 2" : Parameter.SecondUserName, Color.Black);
+            playerWhite = new Player(string.IsNullOrEmpty(Parameter?.FirstUserName) ? "Player 1" : Parameter.FirstUserName, Color.White);
+            playerBlack = new Player(string.IsNullOrEmpty(Parameter?.SecondUserName) ? "Player 2" : Parameter.SecondUserName, Color.Black);
             IFiguresInitializer figuresInitializer = IoC.Get<IFiguresInitializer>();
             IFiguresImagesInitializer figuresImagesInitializer = IoC.Get<IFiguresImagesInitializer>();
 
@@ -159,8 +160,8 @@ namespace Chess_UWP.ViewModels
             GameOverEvent(sender, e);
             repository.AddAsync(new GameInfo
             {
-                FirstPlayerName = "",
-                SecondPlayerName = "",
+                FirstPlayerName = playerWhite.Name,
+                SecondPlayerName = playerBlack.Name,
                 GameLength = e.GameLength,
                 Winner = e.Winner.Name
             });
