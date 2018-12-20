@@ -9,6 +9,7 @@ using Windows.Foundation;
 using static Chess_UWP.Models.Board;
 using System.Linq;
 using Chess_UWP.Database;
+using System.Threading.Tasks;
 
 namespace Chess_UWP.ViewModels
 {
@@ -69,6 +70,8 @@ namespace Chess_UWP.ViewModels
             }
         }
 
+        INavigationService pageNavigationService;
+
         public GameStartSettings Parameter { get; set; }
         private IGameProvider gameProvider;
         private IRepository repository;
@@ -76,6 +79,8 @@ namespace Chess_UWP.ViewModels
 
         public BoardViewModel(INavigationService pageNavigationService) : base(pageNavigationService)
         {
+            this.pageNavigationService = pageNavigationService;
+
             CellsInitializer cellsInitializer = new CellsInitializer();
             foreach (BoardCell item in cellsInitializer.GetBoardCells(BOARD_WIDTH, BOARD_HEIGHT))
             {
@@ -93,7 +98,7 @@ namespace Chess_UWP.ViewModels
             gameProvider = new GameProvider(figuresInitializer, figuresImagesInitializer, new Player[] { playerWhite, playerBlack });
             gameProvider.CollectionChanged += CollectionChanged;
             gameProvider.StartPawnPromotion += StartPawnPromition;
-            gameProvider.GameOver += GameOver;
+            gameProvider.GameOver += GameOverAsync;
 
             Figures = new ObservableCollection<FigureViewModel>();
             IEnumerable<FigureState> figures = gameProvider.GetFigures();
@@ -155,16 +160,20 @@ namespace Chess_UWP.ViewModels
             IsPawnPromotion = false;
         }
 
-        private void GameOver(object sender, GameOverEventArgs e)
+        private async Task GameOverAsync(object sender, GameOverEventArgs e)
         {
-            GameOverEvent(sender, e);
+            await GameOverEvent(sender, e);
             repository.AddAsync(new GameInfo
             {
                 FirstPlayerName = playerWhite.Name,
                 SecondPlayerName = playerBlack.Name,
                 GameLength = e.GameLength,
-                Winner = e.Winner.Name
+                Winner = e.Winner.Name,
+                Date = DateTime.Now
             });
+
+            //NavigateTo<MainMenuViewModel>();
+            pageNavigationService.NavigateToViewModel<MainMenuViewModel>();
         }
     }
 }

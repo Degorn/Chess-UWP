@@ -5,22 +5,39 @@
     xmlns:local="using:Chess_UWP.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:local1="using:Chess_UWP.Database"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:x1="using:System"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <ListView x:Name="GameInfos">
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="local1:GameInfo">
-                    <StackPanel>
-                        <TextBlock Text="{x:Bind FirstPlayerName}"/>
-                        <TextBlock Text="{x:Bind SecondPlayerName}"/>
-                        <TextBlock Text="{x:Bind GameLength}"/>
-                        <TextBlock Text="{x:Bind Winner}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+    <Grid x:Name="MainGrid">
+        <Grid.Resources>
+            <Style TargetType="controls:DataGridCell">
+                <Setter Property="HorizontalAlignment" Value="Center" />
+            </Style>
+        </Grid.Resources>
+        
+        <controls:DataGrid x:Name="GameInfos"
+                           ItemsSource="{Binding GameInfos}"
+                           AutoGenerateColumns="False"
+                           Width="540"
+                           BorderBrush="Gray" BorderThickness="1"
+                           Margin="0,0,0,48"
+                           IsReadOnly="True"
+                           ColumnWidth="*"
+                           SelectionMode="Single">
+            <controls:DataGrid.Columns>
+                <controls:DataGridTextColumn Header="1-st player" Binding="{Binding FirstPlayerName}"/>
+                <controls:DataGridTextColumn Header="2-nd player" Binding="{Binding SecondPlayerName}"/>
+                <controls:DataGridTextColumn Header="Game length" Binding="{Binding GameLength}"/>
+                <controls:DataGridTextColumn Header="Winner" Binding="{Binding Winner}"/>
+                <controls:DataGridTextColumn Header="Date" Binding="{Binding Date}"/>
+            </controls:DataGrid.Columns>
+        </controls:DataGrid>
+        <Button x:Name="Clear"
+                Content="Clear all"
+                HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                Width="500"
+                Margin="0,0,0,8"/>
     </Grid>
 </Page>

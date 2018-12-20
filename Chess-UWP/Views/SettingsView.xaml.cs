@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml.Controls;
+﻿using Microsoft.Toolkit.Uwp.UI.Controls;
+using Windows.UI.Xaml.Controls;
 
 namespace Chess_UWP.Views
 {

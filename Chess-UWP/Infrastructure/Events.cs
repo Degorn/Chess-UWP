@@ -1,5 +1,6 @@
 ﻿using Chess_UWP.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace Chess_UWP.Infrastructure
 {
@@ -25,6 +26,6 @@ namespace Chess_UWP.Infrastructure
     }
 
     public delegate void CollectionChanged(object sender, CollectionChangedEventHandler e);
-    public delegate void GameOverDelegate(object sender, GameOverEventArgs e);
+    public delegate Task GameOverDelegate(object sender, GameOverEventArgs e);
     public delegate void TimerTickDelegate(object sender, TimerTickEventArgs e);
 }

@@ -28,5 +28,11 @@ namespace Chess_UWP.ViewModels
             repository = IoC.Get<IRepository>();
             GameInfos = repository.GetAll();
         }
+
+        private void Clear()
+        {
+            repository.ClearGameStatisticsAsync();
+            GameInfos = repository.GetAll();
+        }
     }
 }

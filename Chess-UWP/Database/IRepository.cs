@@ -6,5 +6,6 @@ namespace Chess_UWP.Database
     {
         void AddAsync(GameInfo gameInfo);
         IEnumerable<GameInfo> GetAll();
+        void ClearGameStatisticsAsync();
     }
 }

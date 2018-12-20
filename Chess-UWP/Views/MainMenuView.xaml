@@ -18,7 +18,7 @@
 
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
             <Button x:Name="NewGame" Content="New game"/>
-            <Button x:Name="Settings" Content="Settings"/>
+            <Button x:Name="Settings" Content="Leaderboard"/>
             <Button x:Name="Close" Content="Exit"/>
         </StackPanel>
     </Grid>

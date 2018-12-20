@@ -33,5 +33,14 @@ namespace Chess_UWP.Database
                 return db.GameInfos.ToList();
             }
         }
+
+        public async void ClearGameStatisticsAsync()
+        {
+            using (ChessDbContext db = new ChessDbContext())
+            {
+                db.GameInfos.RemoveRange(db.GameInfos);
+                await db.SaveChangesAsync();
+            }
+        }
     }
 }

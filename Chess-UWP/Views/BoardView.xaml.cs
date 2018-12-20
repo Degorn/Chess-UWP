@@ -4,6 +4,7 @@ using Chess_UWP.ViewModels;
 using Chess_UWP.Infrastructure;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
+using System.Threading.Tasks;
 
 namespace Chess_UWP.Views
 {
@@ -20,14 +21,13 @@ namespace Chess_UWP.Views
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             BoardViewModel viewModel = DataContext as BoardViewModel;
-            viewModel.GameOverEvent += GameOver;
+            viewModel.GameOverEvent += GameOverAsync;
         }
 
-        private async void GameOver(object sender, GameOverEventArgs e)
+        private async Task GameOverAsync(object sender, GameOverEventArgs e)
         {
             MessageDialog dialog = new MessageDialog($"Winner: {e.Winner.Name} ({e.Winner.Color})!\nGameLength: {e.GameLength}", "Checkmate! Game over");
             await dialog.ShowAsync();
-            Application.Current.Exit();
         }
     }
 }
