@@ -8,13 +8,12 @@ using System.Collections.ObjectModel;
 using Windows.Foundation;
 using static Chess_UWP.Models.Board;
 using System.Linq;
+using Chess_UWP.Database;
 
 namespace Chess_UWP.ViewModels
 {
     public class BoardViewModel : ViewModelBase
     {
-        public GameStartSettings Parameter { get; set; }
-
         private ObservableCollection<BoardCell> cells = new ObservableCollection<BoardCell>();
         public ObservableCollection<BoardCell> Cells
         {
@@ -36,8 +35,6 @@ namespace Chess_UWP.ViewModels
                 NotifyOfPropertyChange(() => Figures);
             }
         }
-
-        private IGameProvider gameProvider;
 
         private ObservableCollection<string> pawnPromotionTypes = new ObservableCollection<string>();
         public ObservableCollection<string> PawnPromotionTypes
@@ -71,6 +68,10 @@ namespace Chess_UWP.ViewModels
                 NotifyOfPropertyChange(() => Timer);
             }
         }
+
+        public GameStartSettings Parameter { get; set; }
+        private IGameProvider gameProvider;
+        private IRepository repository;
 
         public BoardViewModel(INavigationService pageNavigationService) : base(pageNavigationService)
         {
@@ -107,6 +108,8 @@ namespace Chess_UWP.ViewModels
             gameProvider.SetMoveTimer(Parameter?.SecondsOnTurn ?? 0);
             gameProvider.TimerTick += TimerTick;
             gameProvider.StartMoveTimer();
+
+            repository = IoC.Get<IRepository>();
         }
 
         private void TimerTick(object sender, TimerTickEventArgs e)
@@ -154,6 +157,13 @@ namespace Chess_UWP.ViewModels
         private void GameOver(object sender, GameOverEventArgs e)
         {
             GameOverEvent(sender, e);
+            repository.AddAsync(new GameInfo
+            {
+                FirstPlayerName = "",
+                SecondPlayerName = "",
+                GameLength = e.GameLength,
+                Winner = e.Winner.Name
+            });
         }
     }
 }

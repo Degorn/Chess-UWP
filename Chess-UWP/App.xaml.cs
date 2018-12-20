@@ -44,7 +44,9 @@ namespace Chess_UWP
                 PerRequest<BoardViewModel>().
                 PerRequest<FigureViewModel>().
                 Singleton<IFiguresImagesInitializer, FiguresimagesInitializerDefault>().
-                Singleton<IFiguresInitializer, FiguresInitializer>();
+                Singleton<IFiguresInitializer, FiguresInitializer>().
+                Singleton<ChessDbContext>().
+                Singleton<IRepository, Repository>();
         }
 
         protected override void PrepareViewFirst(Frame rootFrame)
@@ -91,11 +93,10 @@ namespace Chess_UWP
 
         private void InitializeDatabase()
         {
-            using (ChessDbContext database = new ChessDbContext())
+            using (ChessDbContext database = IoC.Get<ChessDbContext>())
             {
                 database.Database.Migrate();
             }
         }
-
     }
 }

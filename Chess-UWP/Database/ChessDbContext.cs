@@ -6,6 +6,11 @@ namespace Chess_UWP.Database
     {
         public DbSet<GameInfo> GameInfos { get; set; }
 
+        public ChessDbContext()
+        {
+            Database.EnsureCreated();
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Data Source = Chess.db");

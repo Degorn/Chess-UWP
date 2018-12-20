@@ -100,6 +100,8 @@
     </Compile>
     <Compile Include="Database\ChessDbContext.cs" />
     <Compile Include="Database\GameInfo.cs" />
+    <Compile Include="Database\IRepository.cs" />
+    <Compile Include="Database\Repository.cs" />
     <Compile Include="Infrastructure\Converters\PositionPointToWorldCoordinatesConverter.cs" />
     <Compile Include="Infrastructure\Initializers\CellsInitializer.cs" />
     <Compile Include="Infrastructure\Converters\BoolToBorderThickness.cs" />
