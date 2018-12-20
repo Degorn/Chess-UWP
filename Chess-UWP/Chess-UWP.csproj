@@ -120,6 +120,7 @@
     <Compile Include="Models\Figures\King.cs" />
     <Compile Include="Models\Figures\Queen.cs" />
     <Compile Include="Models\GameStartSettings.cs" />
+    <Compile Include="Models\Move.cs" />
     <Compile Include="ViewModels\BoardViewModel.cs" />
     <Compile Include="ViewModels\FigureViewModel.cs" />
     <Compile Include="ViewModels\MainMenuViewModel.cs" />

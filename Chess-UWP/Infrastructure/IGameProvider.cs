@@ -11,6 +11,7 @@ namespace Chess_UWP.Infrastructure
         event GameOverDelegate GameOver;
         event EventHandler StartPawnPromotion;
         event TimerTickDelegate TimerTick;
+        event MoveLogDelegate LogMove;
 
         IEnumerable<FigureState> GetFigures();
         void ResetFigures(IEnumerable<FigureState> figures);

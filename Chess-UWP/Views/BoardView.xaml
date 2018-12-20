@@ -14,6 +14,12 @@
     <Page.Resources>
         <converters:ColorToSolidColorBrushConverter x:Key="ColorToSolidColorBrushConverter"/>
         <converters:PositionToMarginConverter x:Key="PositionToMarginConverter"/>
+
+        <Style TargetType="Border">
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
     </Page.Resources>
 
     <Grid>
@@ -50,10 +56,32 @@
             </ItemsControl>
         </Grid>
 
-        <TextBlock x:Name="Timer"
-                   HorizontalAlignment="Left" 
-                   Width="200"
-                   TextWrapping="Wrap"/>
+        <Border HorizontalAlignment="Left" VerticalAlignment="Top"
+                Width="180"
+                Height="40"
+                Margin="10,50"
+                Padding="4">
+            <TextBlock x:Name="Timer"
+                       Text="Seconds left: 000"/>
+        </Border>
+        <Border HorizontalAlignment="Left"
+                Width="180"
+                Margin="10,100,0,50"
+                Padding="4">
+
+            <ItemsControl x:Name="Moves">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="local:Move">
+                        <TextBlock Text="{x:Bind Result}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
 
         <Grid x:Name="PawnPromotionGrid"
               Visibility="{Binding IsPawnPromotion}">

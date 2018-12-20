@@ -49,6 +49,17 @@ namespace Chess_UWP.ViewModels
             }
         }
 
+        private ObservableCollection<Move> moves = new ObservableCollection<Move>();
+        public ObservableCollection<Move> Moves
+        {
+            get => moves;
+            set
+            {
+                moves = value;
+                NotifyOfPropertyChange(() => Moves);
+            }
+        }
+
         private bool isPawnPromotion;
         public bool IsPawnPromotion
         {
@@ -117,11 +128,24 @@ namespace Chess_UWP.ViewModels
             gameProvider.StartMoveTimer();
 
             repository = IoC.Get<IRepository>();
+
+            gameProvider.LogMove += GameProvider_LogMove;
+        }
+
+        private void GameProvider_LogMove(object sender, MoveLogEventArgs e)
+        {
+            Moves.Add(new Move
+            {
+                Figure = e.Figure,
+                Color = e.Color,
+                StartPosition = e.StartPosition,
+                EndPosition = e.EndPosition
+            });
         }
 
         private void TimerTick(object sender, TimerTickEventArgs e)
         {
-            Timer += $"\n{e.SecondsLeft} seconds left;";
+            Timer = $"Seconds left: {e.SecondsLeft}";
         }
 
         private void CollectionChanged(object sender, CollectionChangedEventHandler e)

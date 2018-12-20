@@ -221,8 +221,9 @@ namespace Chess_UWP.Infrastructure
             {
                 enPassantPawn = figure;
             }
-            
+
             // Moving.
+            figureStartPosition = figure.Position;
             figure.Position = position;
             figure.Figure.Step();
 
@@ -250,6 +251,14 @@ namespace Chess_UWP.Infrastructure
                     GameLength = TimeSpan.FromSeconds(gameLengthInSeconds).ToString(@"hh\:mm\:ss")
                 });
             }
+
+            LogMove(this, new MoveLogEventArgs
+            {
+                Figure = currentlySelectedFigure.Figure,
+                Color = currentlySelectedFigure.Color,
+                StartPosition = figureStartPosition,
+                EndPosition = currentlySelectedFigure.Position
+            });
 
             ResetState();
         }
@@ -768,6 +777,14 @@ namespace Chess_UWP.Infrastructure
         {
             gameTimer?.Dispose();
         }
+
+        #endregion
+
+        #region Move logger
+
+        public event MoveLogDelegate LogMove;
+
+        private Point figureStartPosition;
 
         #endregion
     }

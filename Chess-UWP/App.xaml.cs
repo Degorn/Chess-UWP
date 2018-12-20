@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using Chess_UWP.Database;
+using Chess_UWP.Infrastructure;
 using Chess_UWP.Infrastructure.Initializers;
 using Chess_UWP.ViewModels;
 using Chess_UWP.Views;
@@ -46,7 +47,8 @@ namespace Chess_UWP
                 Singleton<IFiguresImagesInitializer, FiguresimagesInitializerDefault>().
                 Singleton<IFiguresInitializer, FiguresInitializer>().
                 Singleton<ChessDbContext>().
-                Singleton<IRepository, Repository>();
+                Singleton<IRepository, Repository>().
+                Singleton<IGameProvider, GameProvider>();
         }
 
         protected override void PrepareViewFirst(Frame rootFrame)
