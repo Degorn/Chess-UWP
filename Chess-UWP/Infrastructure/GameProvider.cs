@@ -256,8 +256,8 @@ namespace Chess_UWP.Infrastructure
             {
                 Figure = currentlySelectedFigure.Figure,
                 Color = currentlySelectedFigure.Color,
-                StartPosition = figureStartPosition,
-                EndPosition = currentlySelectedFigure.Position
+                StartPosition = AdaptPositionToBoard(figureStartPosition),
+                EndPosition = AdaptPositionToBoard(currentlySelectedFigure.Position)
             });
 
             ResetState();
@@ -785,6 +785,11 @@ namespace Chess_UWP.Infrastructure
         public event MoveLogDelegate LogMove;
 
         private Point figureStartPosition;
+
+        private Point AdaptPositionToBoard(Point position)
+        {
+            return new Point(position.X, Board.BOARD_HEIGHT - position.Y);
+        }
 
         #endregion
     }
