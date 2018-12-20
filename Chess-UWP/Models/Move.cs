@@ -14,7 +14,7 @@ namespace Chess_UWP.Models
         {
             get
             {
-                return $"({Color.ToString()[0]}) {Figure.GetType().Name.ToString()[0]} {StartPosition} -> {EndPosition}";
+                return $"({Color.ToString()[0]}) {Figure.GetType().Name.ToString()[0]} {Board.GetBoardPosition(StartPosition)} -> {Board.GetBoardPosition(EndPosition)}";
             }
         }
     }

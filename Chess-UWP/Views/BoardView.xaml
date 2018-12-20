@@ -23,66 +23,97 @@
     </Page.Resources>
 
     <Grid>
-        <Grid Width="800" Height="800"
-              BorderThickness="2" BorderBrush="Black"
-              CornerRadius="4">
-            <ItemsControl x:Name="Cells">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate x:DataType="local:BoardCell">
-                        <Rectangle Width="{x:Bind CellSize}" Height="{x:Bind CellSize}"
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Border HorizontalAlignment="Left" VerticalAlignment="Top"
+                    Width="180" Height="40"
+                    Margin="10,50"
+                    Padding="4"
+                    Grid.Column="0">
+                <TextBlock x:Name="Timer"
+                           Text="Seconds left: 000"/>
+            </Border>
+            <Border HorizontalAlignment="Left"
+                    Width="180"
+                    Margin="10,100,0,50"
+                    Padding="4"
+                    Grid.Column="0">
+                <ItemsControl x:Name="Moves">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="local:Move">
+                            <TextBlock Text="{x:Bind Result}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+
+            <Grid Width="800" Height="800"
+                  BorderThickness="2" BorderBrush="Black"
+                  CornerRadius="4"
+                  Grid.Column="1">
+                <ItemsControl x:Name="Cells">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="local:BoardCell">
+                            <Rectangle Width="{x:Bind CellSize}" Height="{x:Bind CellSize}"
                                    Fill="{x:Bind Color, Converter={StaticResource ColorToSolidColorBrushConverter}}"
                                    Margin="{x:Bind Position, Converter={StaticResource PositionToMarginConverter}}"
                                    cl:Message.Attach="[Event Tapped] = [Action CellClick($dataContext)]">
-                        </Rectangle>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                            </Rectangle>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
-            <ItemsControl x:Name="Figures">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <controls:FigureView cl:Bind.Model="{Binding}"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                <ItemsControl x:Name="Figures">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <controls:FigureView cl:Bind.Model="{Binding}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+
+            <Grid x:Name="RowDesignaion"
+                  Grid.Column="1"
+                  HorizontalAlignment="Left"
+                  Margin="80,50,0,50">
+                <Grid.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="FontSize" Value="20"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                </Grid.Resources>
+            </Grid>
+            <Grid x:Name="ColumnDesignaion"
+                  Grid.Column="1"
+                  VerticalAlignment="Bottom"
+                  Margin="100,0,100,20">
+                <Grid.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="FontSize" Value="20"/>
+                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                    </Style>
+                </Grid.Resources>
+            </Grid>
         </Grid>
-
-        <Border HorizontalAlignment="Left" VerticalAlignment="Top"
-                Width="180"
-                Height="40"
-                Margin="10,50"
-                Padding="4">
-            <TextBlock x:Name="Timer"
-                       Text="Seconds left: 000"/>
-        </Border>
-        <Border HorizontalAlignment="Left"
-                Width="180"
-                Margin="10,100,0,50"
-                Padding="4">
-
-            <ItemsControl x:Name="Moves">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate x:DataType="local:Move">
-                        <TextBlock Text="{x:Bind Result}"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </Border>
 
         <Grid x:Name="PawnPromotionGrid"
               Visibility="{Binding IsPawnPromotion}">
