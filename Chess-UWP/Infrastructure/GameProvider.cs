@@ -21,7 +21,7 @@ namespace Chess_UWP.Infrastructure
         private Player EnemyPlayer => players?.FirstOrDefault(p => p != CurrentPlayer);
 
         private FigureState currentlySelectedFigure;
-        private FigureState CurrentlySelectedFigure
+        public FigureState CurrentlySelectedFigure
         {
             get => currentlySelectedFigure;
             set

@@ -8,6 +8,8 @@
     xmlns:converters="using:Chess_UWP.Infrastructure.Converters"
     xmlns:controls="using:Chess_UWP.Controls"
     xmlns:cl="using:Caliburn.Micro"
+    xmlns:foundation="using:Windows.Foundation"
+    xmlns:viewmodels="using:Chess_UWP.ViewModels"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Height="900" Width="1200">
 
@@ -69,9 +71,9 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate x:DataType="local:BoardCell">
                             <Rectangle Width="{x:Bind CellSize}" Height="{x:Bind CellSize}"
-                                   Fill="{x:Bind Color, Converter={StaticResource ColorToSolidColorBrushConverter}}"
-                                   Margin="{x:Bind Position, Converter={StaticResource PositionToMarginConverter}}"
-                                   cl:Message.Attach="[Event Tapped] = [Action CellClick($dataContext)]">
+                                       Fill="{x:Bind Color, Converter={StaticResource ColorToSolidColorBrushConverter}}"
+                                       Margin="{x:Bind Position, Converter={StaticResource PositionToMarginConverter}}"
+                                       cl:Message.Attach="[Event Tapped] = [Action CellClick($dataContext)]">
                             </Rectangle>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -86,6 +88,19 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <controls:FigureView cl:Bind.Model="{Binding}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <ItemsControl x:Name="FigurePositions">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="local:PossiblePosition">
+                            <controls:PossiblePosition cl:Bind.Model="{Binding}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

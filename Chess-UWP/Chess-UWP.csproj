@@ -98,6 +98,9 @@
     <Compile Include="Controls\FigureView.xaml.cs">
       <DependentUpon>FigureView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\PossiblePosition.xaml.cs">
+      <DependentUpon>PossiblePosition.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Database\ChessDbContext.cs" />
     <Compile Include="Database\GameInfo.cs" />
     <Compile Include="Database\IRepository.cs" />
@@ -121,6 +124,7 @@
     <Compile Include="Models\Figures\Queen.cs" />
     <Compile Include="Models\GameStartSettings.cs" />
     <Compile Include="Models\Move.cs" />
+    <Compile Include="Models\PossiblePosition.cs" />
     <Compile Include="ViewModels\BoardViewModel.cs" />
     <Compile Include="ViewModels\FigureViewModel.cs" />
     <Compile Include="ViewModels\MainMenuViewModel.cs" />
@@ -184,6 +188,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Controls\FigureView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PossiblePosition.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

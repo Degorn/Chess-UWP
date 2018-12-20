@@ -82,6 +82,17 @@ namespace Chess_UWP.ViewModels
             }
         }
 
+        private ObservableCollection<PossiblePosition> figurePositions = new ObservableCollection<PossiblePosition>();
+        public ObservableCollection<PossiblePosition> FigurePositions
+        {
+            get => figurePositions;
+            set
+            {
+                figurePositions = value;
+                NotifyOfPropertyChange(() => FigurePositions);
+            }
+        }
+
         INavigationService pageNavigationService;
 
         public GameStartSettings Parameter { get; set; }
@@ -170,6 +181,18 @@ namespace Chess_UWP.ViewModels
         {
             Point cellPosition = cell.Position;
             gameProvider.DoActionByPositions(cellPosition);
+
+            FigurePositions.Clear();
+            if (gameProvider.CurrentlySelectedFigure != null)
+            {
+                foreach (Point position in gameProvider.GetPossibleFigurePositions(gameProvider.CurrentlySelectedFigure))
+                {
+                    FigurePositions.Add(new PossiblePosition
+                    {
+                        Position = position
+                    });
+                }
+            }
         }
 
         private void StartPawnPromition(object sender, EventArgs e)
