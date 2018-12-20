@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Chess_UWP.Database
 {
     public interface IRepository
     {
-        void AddAsync(GameInfo gameInfo);
+        Task AddAsync(GameInfo gameInfo);
         IEnumerable<GameInfo> GetAll();
-        void ClearGameStatisticsAsync();
+        Task ClearGameStatisticsAsync();
     }
 }

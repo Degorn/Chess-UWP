@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Chess_UWP.Database
 {
@@ -17,7 +18,7 @@ namespace Chess_UWP.Database
             this.dbContext = dbContext;
         }
 
-        public async void AddAsync(GameInfo gameInfo)
+        public async Task AddAsync(GameInfo gameInfo)
         {
             using (ChessDbContext db = new ChessDbContext())
             {
@@ -34,7 +35,7 @@ namespace Chess_UWP.Database
             }
         }
 
-        public async void ClearGameStatisticsAsync()
+        public async Task ClearGameStatisticsAsync()
         {
             using (ChessDbContext db = new ChessDbContext())
             {

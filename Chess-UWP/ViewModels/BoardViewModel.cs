@@ -163,7 +163,7 @@ namespace Chess_UWP.ViewModels
         private async Task GameOverAsync(object sender, GameOverEventArgs e)
         {
             await GameOverEvent(sender, e);
-            repository.AddAsync(new GameInfo
+            await repository.AddAsync(new GameInfo
             {
                 FirstPlayerName = playerWhite.Name,
                 SecondPlayerName = playerBlack.Name,
@@ -172,7 +172,6 @@ namespace Chess_UWP.ViewModels
                 Date = DateTime.Now
             });
 
-            //NavigateTo<MainMenuViewModel>();
             pageNavigationService.NavigateToViewModel<MainMenuViewModel>();
         }
     }
