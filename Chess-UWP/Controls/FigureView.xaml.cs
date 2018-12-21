@@ -8,5 +8,15 @@ namespace Chess_UWP.Controls
         {
             this.InitializeComponent();
         }
+
+        private void ScaleUp_Completed(object sender, object e)
+        {
+            MoveAnimation.Begin();
+        }
+
+        private void Move_Completed(object sender, object e)
+        {
+            ScaleDown.Begin();
+        }
     }
 }

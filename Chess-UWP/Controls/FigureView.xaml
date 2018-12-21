@@ -17,34 +17,60 @@
         <local:PositionToMarginConverter x:Key="PositionToMarginConverter"/>
         <local:BoolToBorderThickness x:Key="BoolToBorderThickness"/>
 
-        <Storyboard x:Name="MoveAnimation">
+        <Storyboard x:Name="MoveAnimation"
+                    Completed="Move_Completed">
             <DoubleAnimation Storyboard.TargetName="FigurePosition"
                              Storyboard.TargetProperty="X"
                              To="{Binding XPos}"
-                             Duration="0:0:0.5"/>
+                             Duration="0:0:0.3"/>
             <DoubleAnimation Storyboard.TargetName="FigurePosition"
                              Storyboard.TargetProperty="Y"
                              To="{Binding YPos}"
-                             Duration="0:0:0.5"/>
+                             Duration="0:0:0.3"/>
+        </Storyboard>
+        <Storyboard x:Name="ScaleUp"
+                    Completed="ScaleUp_Completed">
+            <DoubleAnimation Storyboard.TargetName="FigureScale"
+                             Storyboard.TargetProperty="(ScaleTransform.ScaleX)"
+                             To="1.2"
+                             Duration="0:0:0.1"/>
+            <DoubleAnimation Storyboard.TargetName="FigureScale"
+                             Storyboard.TargetProperty="(ScaleTransform.ScaleY)"
+                             To="1.2"
+                             Duration="0:0:0.1"/>
+        </Storyboard>
+        <Storyboard x:Name="ScaleDown">
+            <DoubleAnimation Storyboard.TargetName="FigureScale"
+                             Storyboard.TargetProperty="(ScaleTransform.ScaleX)"
+                             To="1"
+                             Duration="0:0:0.1"/>
+            <DoubleAnimation Storyboard.TargetName="FigureScale"
+                             Storyboard.TargetProperty="(ScaleTransform.ScaleY)"
+                             To="1"
+                             Duration="0:0:0.1"/>
         </Storyboard>
     </UserControl.Resources>
 
     <interactivity:Interaction.Behaviors>
         <core:DataTriggerBehavior Binding="{Binding PositionChangedTrigger}"
                                   Value="{Binding PositionChangedTrigger}">
-            <media:ControlStoryboardAction Storyboard="{StaticResource MoveAnimation}"/>
+            <media:ControlStoryboardAction Storyboard="{StaticResource ScaleUp}"/>
         </core:DataTriggerBehavior>
     </interactivity:Interaction.Behaviors>
 
     <ContentControl x:Name="FigureState"
                     Width="100">
         <ContentControl.RenderTransform>
-            <TranslateTransform x:Name="FigurePosition"
-                                X="{Binding XPos}"
-                                Y="{Binding YPos}"/>
+            <TransformGroup>
+                <TranslateTransform x:Name="FigurePosition"/>
+            </TransformGroup>
         </ContentControl.RenderTransform>
-        <Border BorderBrush="Green"
+        <Border BorderBrush="Green" RenderTransformOrigin="0.5,0.5"
                 BorderThickness="{Binding FigureState.Selected, Converter={StaticResource BoolToBorderThickness}}">
+            <Border.RenderTransform>
+                <ScaleTransform x:Name="FigureScale" ScaleX="1" ScaleY="1"/>
+            </Border.RenderTransform>
+            
             <Image Source="{Binding FigureState.Figure.Image, Converter={StaticResource UriToBitmapImageConverter}}"
                    IsHitTestVisible="False"/>
         </Border>
