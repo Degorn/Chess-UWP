@@ -15,10 +15,32 @@
     </UserControl.Resources>
 
     <ContentControl Padding="25">
-        <Ellipse Opacity="0.6"
+        <Ellipse x:Name="TargetPosition" 
+                 Opacity="0.6"
                  Width="50" Height="50"
                  Fill="DarkGray"
-                 IsHitTestVisible="False"
-                 Margin="{Binding Position, Converter={StaticResource PositionToMarginConverter}}"/>
+                 IsHitTestVisible="False"  RenderTransformOrigin="0.5,0.5"
+                 Margin="{Binding Position, Converter={StaticResource PositionToMarginConverter}}">
+
+            <Ellipse.RenderTransform>
+                <ScaleTransform x:Name="EllipseScale" ScaleX="1" ScaleY="1"/>
+            </Ellipse.RenderTransform>
+            <Ellipse.Triggers>
+                <EventTrigger RoutedEvent="Ellipse.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="EllipseScale"
+                                             Storyboard.TargetProperty="(ScaleTransform.ScaleX)"
+                                             From="0" To="1"
+                                             Duration="0:0:0.2"/>
+                            <DoubleAnimation Storyboard.TargetName="EllipseScale"
+                                             Storyboard.TargetProperty="(ScaleTransform.ScaleY)"
+                                             From="0" To="1"
+                                             Duration="0:0:0.2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Ellipse.Triggers>
+        </Ellipse>
     </ContentControl>
 </UserControl>
