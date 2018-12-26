@@ -598,17 +598,15 @@ namespace Chess_UWP.Infrastructure
                         break;
                     }
 
-                    bool skipFigure = false;
                     foreach (Point vector in direction.Positions)
                     {
                         Point potentialPosition = figure.Position.Add(vector);
                         FigureState figureOnPosition = GetFigureByPosition(potentialPosition);
-                        if (figureToMove.Position == potentialPosition ||
-                            skipFigure)
+                        if (figureToMove.Position == potentialPosition)
                         {
                             figureOnPosition = null;
-                            skipFigure = true;
                         }
+
                         if (figure.Figure is Pawn && potentialPosition.Subtract(figure.Position).X == 0) // Skip pawn forward moving because they can't beat.
                         {
                             break;
@@ -628,8 +626,12 @@ namespace Chess_UWP.Infrastructure
                         {
                             break;
                         }
-                    }
 
+                        if (potentialPosition == kingPosition)
+                        {
+                            return false;
+                        }
+                    }
                 }
             }
 

@@ -20,10 +20,9 @@ namespace Chess_UWP.Tests
 
         public Tests()
         {
-            IFiguresInitializer figuresInitializer = new FiguresInitializer();
-            IFiguresImagesInitializer figuresImagesInitializer = new FiguresimagesInitializerDefault();
+            IFiguresInitializer figuresInitializer = new FiguresInitializer(new FiguresimagesInitializerDefault());
 
-            gameProvider = new GameProvider(figuresInitializer, figuresImagesInitializer, new Player[] { new Player("P1", Color.White), new Player("P2", Color.Black) });
+            gameProvider = new GameProvider(figuresInitializer, new Player[] { new Player("P1", Color.White), new Player("P2", Color.Black) });
         }
 
         #region Helpers
@@ -448,6 +447,15 @@ namespace Chess_UWP.Tests
                 { new FigureState(new Pawn(), new Point(2, 1), Color.White), new List<Point>{ new Point(2, 2) } },
                 { new FigureState(new Queen(), new Point(4, 4), Color.Black), null }
             }, "Pawn should be only possible to block the king");
+
+            FigurePossiblePositions(new Dictionary<FigureState, List<Point>>()
+            {
+                { new FigureState(new Rook(), new Point(0, 0), Color.Black), null },
+                { new FigureState(new Queen(), new Point(1, 0), Color.White), null },
+                { new FigureState(new Bishop(), new Point(2, 0), Color.Black), new List<Point>{ new Point(1, 1), new Point(0, 2), new Point(3, 1), new Point(4, 2), new Point(5, 3), new Point(6, 4), new Point(7, 5) } },
+                { new FigureState(new Queen(), new Point(3, 0), Color.Black), null },
+                { new FigureState(new King(), new Point(4, 0), Color.Black), null },
+            }, "Bishop should be possible to move");
         }
     }
 }
