@@ -1,6 +1,7 @@
 ﻿using Chess_UWP.Models;
 using Chess_UWP.Models.Figures;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.Foundation;
 
@@ -38,4 +39,10 @@ namespace Chess_UWP.Infrastructure
         public Point EndPosition { get; set; }
     }
     public delegate void MoveLogDelegate(object sender, MoveLogEventArgs e);
+
+    public class PawnPromotionEventArgs : EventArgs
+    {
+        public IEnumerable<string> Types;
+    }
+    public delegate void PawnPromotionDelegate(object sender, PawnPromotionEventArgs e);
 }

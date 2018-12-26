@@ -229,7 +229,10 @@ namespace Chess_UWP.Infrastructure
             // Pawn promotion.
             if (CheckPawnPromotion(figure))
             {
-                StartPawnPromotion(this, EventArgs.Empty);
+                StartPawnPromotion(this, new PawnPromotionEventArgs
+                {
+                    Types = GetPawnPromotionTypes()
+                });
                 return;
             }
 
@@ -637,7 +640,7 @@ namespace Chess_UWP.Infrastructure
 
         #region Pawn promotion
 
-        public event EventHandler StartPawnPromotion;
+        public event PawnPromotionDelegate StartPawnPromotion;
 
         private bool CheckPawnPromotion(FigureState pawn)
         {
@@ -650,7 +653,7 @@ namespace Chess_UWP.Infrastructure
                    pawn.Color == Color.White && pawn.Position.Y == 0;
         }
 
-        public IEnumerable<string> GetPawnPromotionTypes()
+        private IEnumerable<string> GetPawnPromotionTypes()
         {
             return new string[]
             {

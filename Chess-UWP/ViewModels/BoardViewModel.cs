@@ -131,7 +131,6 @@ namespace Chess_UWP.ViewModels
                     FigureState = figure
                 });
             }
-            PawnPromotionTypes = new ObservableCollection<string>(gameProvider.GetPawnPromotionTypes());
 
             gameProvider.SetMoveTimer(Parameter?.SecondsOnTurn ?? 0);
             gameProvider.TimerTick += TimerTick;
@@ -194,8 +193,9 @@ namespace Chess_UWP.ViewModels
             }
         }
 
-        private void StartPawnPromition(object sender, EventArgs e)
+        private void StartPawnPromition(object sender, PawnPromotionEventArgs e)
         {
+            PawnPromotionTypes = new ObservableCollection<string>(e.Types);
             IsPawnPromotion = true;
         }
 

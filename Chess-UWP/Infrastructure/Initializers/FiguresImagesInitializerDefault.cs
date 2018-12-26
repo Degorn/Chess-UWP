@@ -1,5 +1,4 @@
 ﻿using System;
-using Chess_UWP.Models;
 using Chess_UWP.Models.Figures;
 using static Chess_UWP.Models.Board;
 

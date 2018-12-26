@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Chess_UWP.Models;
 using Windows.Foundation;
 
@@ -9,7 +8,7 @@ namespace Chess_UWP.Infrastructure
     {
         event CollectionChanged CollectionChanged;
         event GameOverDelegate GameOver;
-        event EventHandler StartPawnPromotion;
+        event PawnPromotionDelegate StartPawnPromotion;
         event TimerTickDelegate TimerTick;
         event MoveLogDelegate LogMove;
 
@@ -20,7 +19,6 @@ namespace Chess_UWP.Infrastructure
         IEnumerable<Point> GetPossibleFigurePositions(FigureState figure, bool includeCheckmateState = true);
 
         GameProvider.CheckmateState GetCheckmateState();
-        IEnumerable<string> GetPawnPromotionTypes();
         void PromotePawn(string type);
 
         void SetMoveTimer(int secondsOnMove);

@@ -47,6 +47,7 @@ namespace Chess_UWP.Infrastructure.Initializers
 
         public FigureState GetFigure(Figure figure, Point position, Color color)
         {
+            figure.Image = imagesInitializer?.GetImage(figure.GetType(), color);
             return new FigureState(figure, position, color);
         }
     }
