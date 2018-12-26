@@ -41,20 +41,20 @@ namespace Chess_UWP.Infrastructure
             }
         }
 
-        private IFiguresImagesInitializer ImagesInitializer { get; }
+        private readonly IFiguresInitializer figuresInitializer;
 
         #region Constructors
 
-        public GameProvider(IFiguresInitializer figuresInitializer, IFiguresImagesInitializer imagesInitializer)
+        public GameProvider(IFiguresInitializer figuresInitializer)
         {
-            ImagesInitializer = imagesInitializer;
-            FiguresOnBoard = figuresInitializer.GetFigures(imagesInitializer).ToList();
+            this.figuresInitializer = figuresInitializer;
+            FiguresOnBoard = figuresInitializer.GetFigures().ToList();
             syncContext = SynchronizationContext.Current;
 
             StartGameTimer();
         }
 
-        public GameProvider(IFiguresInitializer figuresInitializer, IFiguresImagesInitializer imagesInitializer, Player[] players) : this(figuresInitializer, imagesInitializer)
+        public GameProvider(IFiguresInitializer figuresInitializer, Player[] players) : this(figuresInitializer)
         {
             this.players = players;
         }
@@ -80,8 +80,7 @@ namespace Chess_UWP.Infrastructure
 
         private void AddFigure(Figure figure, Point position, Color color)
         {
-            FigureState newFigure = new FigureState(figure, position, color);
-            newFigure.Figure.Image = ImagesInitializer.GetImage(figure.GetType(), color);
+            FigureState newFigure = figuresInitializer.GetFigure(figure, position, color);
             FiguresOnBoard.Add(newFigure);
             CollectionChanged(this, new CollectionChangedEventHandler
             {

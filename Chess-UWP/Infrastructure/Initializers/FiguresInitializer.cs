@@ -8,7 +8,14 @@ namespace Chess_UWP.Infrastructure.Initializers
 {
     public class FiguresInitializer : IFiguresInitializer
     {
-        public IEnumerable<FigureState> GetFigures(IFiguresImagesInitializer imagesInitializer)
+        private readonly IFiguresImagesInitializer imagesInitializer;
+
+        public FiguresInitializer(IFiguresImagesInitializer imagesInitializer)
+        {
+            this.imagesInitializer = imagesInitializer;
+        }
+
+        public IEnumerable<FigureState> GetFigures()
         {
             List<FigureState> figures = new List<FigureState>
             {
@@ -32,10 +39,15 @@ namespace Chess_UWP.Infrastructure.Initializers
             for (int i = 0; i < BOARD_WIDTH; i++)
             {
                 figures.Add(new FigureState(new Pawn(false) { Image = imagesInitializer?.GetImage<Pawn>(Color.Black) }, new Point(i, 1), Color.Black));
-                figures.Add(new FigureState(new Pawn(true)  { Image = imagesInitializer?.GetImage<Pawn>(Color.White) }, new Point(i, 6), Color.White));
+                figures.Add(new FigureState(new Pawn(true) { Image = imagesInitializer?.GetImage<Pawn>(Color.White) }, new Point(i, 6), Color.White));
             }
 
             return figures;
+        }
+
+        public FigureState GetFigure(Figure figure, Point position, Color color)
+        {
+            return new FigureState(figure, position, color);
         }
     }
 }

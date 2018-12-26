@@ -116,9 +116,8 @@ namespace Chess_UWP.ViewModels
             playerWhite = new Player(string.IsNullOrEmpty(Parameter?.FirstUserName) ? "Player 1" : Parameter.FirstUserName, Color.White);
             playerBlack = new Player(string.IsNullOrEmpty(Parameter?.SecondUserName) ? "Player 2" : Parameter.SecondUserName, Color.Black);
             IFiguresInitializer figuresInitializer = IoC.Get<IFiguresInitializer>();
-            IFiguresImagesInitializer figuresImagesInitializer = IoC.Get<IFiguresImagesInitializer>();
 
-            gameProvider = new GameProvider(figuresInitializer, figuresImagesInitializer, new Player[] { playerWhite, playerBlack });
+            gameProvider = new GameProvider(figuresInitializer, new Player[] { playerWhite, playerBlack });
             gameProvider.CollectionChanged += CollectionChanged;
             gameProvider.StartPawnPromotion += StartPawnPromition;
             gameProvider.GameOver += GameOverAsync;
