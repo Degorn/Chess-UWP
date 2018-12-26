@@ -429,11 +429,6 @@ namespace Chess_UWP.Infrastructure
 
         public event GameOverDelegate GameOver;
 
-        public enum CheckmateState
-        {
-            None, Check, Checkmate
-        }
-
         private IEnumerable<Direction> GetAllFiguresDirectionsByColor(Color color)
         {
             foreach (FigureState figure in FiguresOnBoard.Where(f => f.Color == color && f.Figure.GetType() != typeof(King)))

@@ -7,6 +7,11 @@ using Windows.Foundation;
 
 namespace Chess_UWP.Infrastructure
 {
+    public enum CheckmateState
+    {
+        None, Check, Checkmate
+    }
+
     public enum ListChagesOperation
     {
         Add, Remove

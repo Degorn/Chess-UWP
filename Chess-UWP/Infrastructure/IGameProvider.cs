@@ -13,12 +13,14 @@ namespace Chess_UWP.Infrastructure
         event MoveLogDelegate LogMove;
 
         FigureState CurrentlySelectedFigure { get; }
-        IEnumerable<FigureState> GetFigures();
-        void ResetFigures(IEnumerable<FigureState> figures);
-        void DoActionByPositions(Point position);
-        IEnumerable<Point> GetPossibleFigurePositions(FigureState figure, bool includeCheckmateState = true);
 
-        GameProvider.CheckmateState GetCheckmateState();
+        IEnumerable<FigureState> GetFigures();
+        IEnumerable<Point> GetPossibleFigurePositions(FigureState figure, bool includeCheckmateState = true);
+        void DoActionByPositions(Point position);
+        void ResetFigures(IEnumerable<FigureState> figures);
+
+        CheckmateState GetCheckmateState();
+
         void PromotePawn(string type);
 
         void SetMoveTimer(int secondsOnMove);
