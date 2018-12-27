@@ -133,7 +133,7 @@ namespace Chess_UWP.ViewModels
                 });
             }
 
-            IMoveTimer moveTimer = new MoveTimer(gameProvider);
+            IMoveTimer moveTimer = new MoveTimer(GameProvider.Instance);
             moveTimer.SetTimer(Parameter?.SecondsOnTurn ?? 0);
             moveTimer.TimerTick += TimerTick;
             moveTimer.TimeIsUp += MoveTimer_MoveEnds;

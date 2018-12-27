@@ -1,4 +1,5 @@
-﻿using Chess_UWP.Infrastructure.Initializers;
+﻿using Caliburn.Micro;
+using Chess_UWP.Infrastructure.Initializers;
 using Chess_UWP.Models;
 using Chess_UWP.Models.Figures;
 using System;
@@ -12,6 +13,20 @@ namespace Chess_UWP.Infrastructure
 {
     public class GameProvider : IGameProvider
     {
+        private static GameProvider instance;
+        public static GameProvider Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    throw new Exception("Object not created.");
+                }
+                return instance;
+            }
+        }
+
+
         private ICollection<FigureState> FiguresOnBoard { get; set; }
         public event CollectionChanged CollectionChanged;
 
@@ -49,6 +64,8 @@ namespace Chess_UWP.Infrastructure
         {
             this.figuresInitializer = figuresInitializer;
             FiguresOnBoard = figuresInitializer.GetFigures().ToList();
+
+            instance = this;
 
             StartGameTimer();
         }
@@ -244,16 +261,19 @@ namespace Chess_UWP.Infrastructure
 
         public void FinalizeMove()
         {
+            // If player is on check, but didn't move in time.
+            CheckmateState state = GetCheckmateState();
+            if (state != CheckmateState.None)
+            {
+                EndTheGame();
+            }
+
             SwitchPlayer();
 
-            CheckmateState state = GetCheckmateState();
+            state = GetCheckmateState();
             if (state == CheckmateState.Checkmate)
             {
-                GameOver(this, new GameOverEventArgs
-                {
-                    Winner = EnemyPlayer,
-                    GameLength = TimeSpan.FromSeconds(gameLengthInSeconds).ToString(@"hh\:mm\:ss")
-                });
+                EndTheGame();
             }
 
             Move(this, new MoveEventArgs
@@ -331,6 +351,15 @@ namespace Chess_UWP.Infrastructure
             {
                 CurrentlySelectedFigure = null;
             }
+        }
+
+        private void EndTheGame()
+        {
+            GameOver(this, new GameOverEventArgs
+            {
+                Winner = EnemyPlayer,
+                GameLength = TimeSpan.FromSeconds(gameLengthInSeconds).ToString(@"hh\:mm\:ss")
+            });
         }
 
         #endregion
