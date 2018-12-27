@@ -519,14 +519,10 @@ namespace Chess_UWP.Infrastructure
             }
 
             // Check if the king can move in a safe place.
-            IEnumerable<Point> possiblePositionsOfKing = GetPossibleFigurePositions(kingOfTheCurrentPlayer, false);
-            IEnumerable<Point> enemyDirectionsPositions = GetAllFiguresPositionsByColor(EnemyPlayer.Color);
-            foreach (Point kingPosition in possiblePositionsOfKing)
+            IEnumerable<Point> possiblePositionsOfKing = GetPossibleFigurePositions(kingOfTheCurrentPlayer);
+            if (possiblePositionsOfKing.Count() > 0)
             {
-                if (!enemyDirectionsPositions.Contains(kingPosition) && CheckIfMoveIsSaveForKing(kingOfTheCurrentPlayer, kingPosition))
-                {
-                    return false;
-                }
+                return false;
             }
 
             // Check if any of figures can block the king.
