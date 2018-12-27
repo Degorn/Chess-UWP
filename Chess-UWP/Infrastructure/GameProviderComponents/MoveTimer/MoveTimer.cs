@@ -21,12 +21,18 @@ namespace Chess_UWP.Infrastructure.GameProviderComponents.MoveTimer
 
             this.motionHandler = motionHandler;
             this.motionHandler.Move += RestartTimer;  
+            
+        }
+
+        private void RestartTimer()
+        {
+            StopTimer();
+            StartTimer();
         }
 
         private void RestartTimer(object sender, MoveEventArgs e)
         {
-            StopTimer();
-            StartTimer();
+            RestartTimer();
         }
 
         public void SetTimer(int secondsOnMove)
@@ -34,7 +40,7 @@ namespace Chess_UWP.Infrastructure.GameProviderComponents.MoveTimer
             this.secondsOnMove = secondsOnMove;
         }
 
-        private void StopTimer()
+        public void StopTimer()
         {
             moveTimer?.Dispose();
         }
@@ -60,6 +66,7 @@ namespace Chess_UWP.Infrastructure.GameProviderComponents.MoveTimer
                 {
                     motionHandler.FinalizeMove();
                     TimeIsUp(this, EventArgs.Empty);
+                    RestartTimer();
                 }
             }, null);
         }

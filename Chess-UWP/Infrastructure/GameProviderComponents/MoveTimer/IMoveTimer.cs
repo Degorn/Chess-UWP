@@ -9,5 +9,6 @@ namespace Chess_UWP.Infrastructure.GameProviderComponents.MoveTimer
 
         void SetTimer(int secondsOnMove);
         void StartTimer();
+        void StopTimer();
     }
 }

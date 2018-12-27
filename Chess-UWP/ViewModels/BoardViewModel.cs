@@ -99,6 +99,7 @@ namespace Chess_UWP.ViewModels
 
         public GameStartSettings Parameter { get; set; }
         private IGameProvider gameProvider;
+        private IMoveTimer moveTimer;
         private IRepository repository;
         Player playerWhite, playerBlack;
 
@@ -134,10 +135,10 @@ namespace Chess_UWP.ViewModels
                 });
             }
 
-            IMoveTimer moveTimer = new MoveTimer(GameProvider.Instance);
+            moveTimer = new MoveTimer(GameProvider.Instance);
             moveTimer.SetTimer(Parameter?.SecondsOnTurn ?? 0);
             moveTimer.TimerTick += TimerTick;
-            moveTimer.TimeIsUp += MoveTimer_MoveEnds;
+            moveTimer.TimeIsUp += MoveTimer_TimeIsUp;
             moveTimer.StartTimer();
 
             IMotionHandler motionHandler = GameProvider.Instance;
@@ -146,7 +147,7 @@ namespace Chess_UWP.ViewModels
             repository = IoC.Get<IRepository>();
         }
 
-        private void MoveTimer_MoveEnds(object sender, EventArgs e)
+        private void MoveTimer_TimeIsUp(object sender, EventArgs e)
         {
             FigurePositions.Clear();
         }
@@ -219,6 +220,8 @@ namespace Chess_UWP.ViewModels
         {
             await ShowGameOverDialogAsync(e);
             await SaveResultAsync(e);
+
+            moveTimer.StopTimer();
 
             pageNavigationService.NavigateToViewModel<MainMenuViewModel>();
         }

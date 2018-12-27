@@ -242,6 +242,7 @@ namespace Chess_UWP.Infrastructure
             figureStartPosition = figure.Position;
             figure.Position = position;
             figure.Figure.Step();
+            moved = true;
 
             // Pawn promotion.
             if (CheckPawnPromotion(figure))
@@ -266,6 +267,17 @@ namespace Chess_UWP.Infrastructure
                 EndTheGame();
             }
 
+            if (currentlySelectedFigure != null && moved)
+            {
+                Move(this, new MoveEventArgs
+                {
+                    Figure = currentlySelectedFigure.Figure,
+                    Color = currentlySelectedFigure.Color,
+                    StartPosition = AdaptPositionToBoard(figureStartPosition),
+                    EndPosition = AdaptPositionToBoard(currentlySelectedFigure.Position)
+                });
+            }
+
             SwitchPlayer();
 
             state = GetCheckmateState();
@@ -273,14 +285,6 @@ namespace Chess_UWP.Infrastructure
             {
                 EndTheGame();
             }
-
-            Move(this, new MoveEventArgs
-            {
-                Figure = currentlySelectedFigure.Figure,
-                Color = currentlySelectedFigure.Color,
-                StartPosition = AdaptPositionToBoard(figureStartPosition),
-                EndPosition = AdaptPositionToBoard(currentlySelectedFigure.Position)
-            });
 
             ResetState();
         }
@@ -349,6 +353,8 @@ namespace Chess_UWP.Infrastructure
             {
                 CurrentlySelectedFigure = null;
             }
+
+            moved = false;
         }
 
         private void EndTheGame()
@@ -735,7 +741,8 @@ namespace Chess_UWP.Infrastructure
         private bool CheckEnPassant(Point potentialPosition)
         {
             return enPassantPawn != null &&
-                CurrentlySelectedFigure.Figure is Pawn &&
+                CurrentlySelectedFigure?.Figure is Pawn &&
+                CurrentlySelectedFigure?.Color != enPassantPawn.Color &&
                 potentialPosition == enPassantPosition;
         }
 
@@ -768,6 +775,7 @@ namespace Chess_UWP.Infrastructure
 
         public event MoveDelegate Move;
 
+        private bool moved;
         private Point figureStartPosition;
 
         private Point AdaptPositionToBoard(Point position)
