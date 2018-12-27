@@ -68,7 +68,7 @@ namespace Chess_UWP.Tests
             }
         }
 
-        private void CheckCheckmateState(IEnumerable<FigureState> figuresWithPossiblePositions, GameProvider.CheckmateState expectedState, string assertMessage = "")
+        private void CheckCheckmateState(IEnumerable<FigureState> figuresWithPossiblePositions, CheckmateState expectedState, string assertMessage = "")
         {
             ObservableCollection<FigureState> figures = new ObservableCollection<FigureState>();
             foreach (FigureState figure in figuresWithPossiblePositions)
@@ -77,7 +77,7 @@ namespace Chess_UWP.Tests
             }
             gameProvider.ResetFigures(figures);
 
-            GameProvider.CheckmateState actualState = gameProvider.GetCheckmateState();
+            CheckmateState actualState = gameProvider.GetCheckmateState();
             Assert.AreEqual(expectedState, actualState, assertMessage);
         }
 
@@ -320,25 +320,25 @@ namespace Chess_UWP.Tests
                 new FigureState(new King(), new Point(0, 0), Color.White),
                 new FigureState(new Pawn(), new Point(1, 1), Color.White),
                 new FigureState(new Bishop(), new Point(4, 4), Color.Black),
-            }, GameProvider.CheckmateState.None, "Without check");
+            }, CheckmateState.None, "Without check");
 
             CheckCheckmateState(new FigureState[]
             {
                 new FigureState(new King(), new Point(0, 0), Color.White),
                 new FigureState(new Rook(), new Point(2, 0), Color.Black),
-            }, GameProvider.CheckmateState.Check, "Check with rook");
+            }, CheckmateState.Check, "Check with rook");
 
             CheckCheckmateState(new FigureState[]
             {
                 new FigureState(new King(), new Point(0, 0), Color.White),
                 new FigureState(new Pawn(true), new Point(1, 1), Color.Black),
-            }, GameProvider.CheckmateState.Check, "Check with pawn");
+            }, CheckmateState.Check, "Check with pawn");
 
             CheckCheckmateState(new FigureState[]
             {
                 new FigureState(new King(), new Point(0, 0), Color.White),
                 new FigureState(new Knight(), new Point(1, 2), Color.Black),
-            }, GameProvider.CheckmateState.Check, "Check with knight");
+            }, CheckmateState.Check, "Check with knight");
 
             CheckCheckmateState(new FigureState[]
             {
@@ -352,7 +352,7 @@ namespace Chess_UWP.Tests
                 new FigureState(new Rook(), new Point(2, 3), Color.White),
                 new FigureState(new Rook(), new Point(4, 1), Color.White),
                 new FigureState(new Queen(), new Point(3, 2), Color.Black),
-            }, GameProvider.CheckmateState.Check, "Check with queen");
+            }, CheckmateState.Check, "Check with queen");
 
 
             CheckCheckmateState(new FigureState[]
@@ -361,7 +361,7 @@ namespace Chess_UWP.Tests
                 new FigureState(new Pawn(), new Point(0, 1), Color.White),
                 new FigureState(new Pawn(), new Point(1, 1), Color.White),
                 new FigureState(new Rook(), new Point(3, 0), Color.Black)
-            }, GameProvider.CheckmateState.Checkmate, "Checkmate with rook and blocking pawns");
+            }, CheckmateState.Checkmate, "Checkmate with rook and blocking pawns");
 
             CheckCheckmateState(new FigureState[]
             {
@@ -370,14 +370,14 @@ namespace Chess_UWP.Tests
                 new FigureState(new Pawn(true), new Point(1, 1), Color.Black),
                 new FigureState(new Pawn(true), new Point(1, 2), Color.Black),
                 new FigureState(new Pawn(true), new Point(2, 2), Color.Black),
-            }, GameProvider.CheckmateState.Checkmate, "Checkmate with pawns");
+            }, CheckmateState.Checkmate, "Checkmate with pawns");
 
             CheckCheckmateState(new FigureState[]
             {
                 new FigureState(new King(), new Point(0, 0), Color.White),
                 new FigureState(new Rook(), new Point(1, 0), Color.Black),
                 new FigureState(new Rook(), new Point(1, 1), Color.Black)
-            }, GameProvider.CheckmateState.Checkmate, "Checkmate with two rooks");
+            }, CheckmateState.Checkmate, "Checkmate with two rooks");
 
             CheckCheckmateState(new FigureState[]
             {
@@ -385,7 +385,7 @@ namespace Chess_UWP.Tests
                 new FigureState(new Pawn(true), new Point(3, 1), Color.Black),
                 new FigureState(new Pawn(true), new Point(4, 1), Color.Black),
                 new FigureState(new King(), new Point(4, 2), Color.Black)
-            }, GameProvider.CheckmateState.Checkmate, "Two pawn checkmate");
+            }, CheckmateState.Checkmate, "Two pawn checkmate");
 
             CheckCheckmateState(new FigureState[]
             {
@@ -395,7 +395,7 @@ namespace Chess_UWP.Tests
                 new FigureState(new Pawn(), new Point(7, 1), Color.White),
                 new FigureState(new Queen(), new Point(6, 1), Color.Black),
                 new FigureState(new Bishop(), new Point(0, 7), Color.Black)
-            }, GameProvider.CheckmateState.Checkmate, "Diagonal checkmate");
+            }, CheckmateState.Checkmate, "Diagonal checkmate");
 
             CheckCheckmateState(new FigureState[]
             {
@@ -404,7 +404,7 @@ namespace Chess_UWP.Tests
                 new FigureState(new Pawn(), new Point(0, 1), Color.White),
                 new FigureState(new Pawn(), new Point(1, 1), Color.White),
                 new FigureState(new Knight(), new Point(2, 1), Color.Black),
-            }, GameProvider.CheckmateState.Checkmate, "Smothered checkmate");
+            }, CheckmateState.Checkmate, "Smothered checkmate");
 
             CheckCheckmateState(new FigureState[]
             {
@@ -412,14 +412,14 @@ namespace Chess_UWP.Tests
                 new FigureState(new Pawn(), new Point(0, 1), Color.White),
                 new FigureState(new Bishop(), new Point(6, 6), Color.Black),
                 new FigureState(new Bishop(), new Point(7, 6), Color.Black),
-            }, GameProvider.CheckmateState.Checkmate, "Two bishop checkmate");
+            }, CheckmateState.Checkmate, "Two bishop checkmate");
 
             CheckCheckmateState(new FigureState[]
             {
                 new FigureState(new King(), new Point(0, 0), Color.White),
                 new FigureState(new Queen(), new Point(1, 1), Color.Black),
                 new FigureState(new King(), new Point(1, 2), Color.Black),
-            }, GameProvider.CheckmateState.Checkmate, "Queen and king checkmate");
+            }, CheckmateState.Checkmate, "Queen and king checkmate");
         }
 
         [TestMethod]
@@ -456,6 +456,13 @@ namespace Chess_UWP.Tests
                 { new FigureState(new Queen(), new Point(3, 0), Color.Black), null },
                 { new FigureState(new King(), new Point(4, 0), Color.Black), null },
             }, "Bishop should be possible to move");
+
+            FigurePossiblePositions(new Dictionary<FigureState, List<Point>>()
+            {
+                { new FigureState(new Queen(), new Point(0, 3), Color.Black), null },
+                { new FigureState(new King(), new Point(4, 7), Color.White), null },
+                { new FigureState(new Pawn(true), new Point(1, 6), Color.White), new List<Point>{ new Point(1, 4) } },
+            }, "Pawn should be possible to block the king");
         }
     }
 }

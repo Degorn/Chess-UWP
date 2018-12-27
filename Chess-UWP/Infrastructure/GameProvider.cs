@@ -125,10 +125,13 @@ namespace Chess_UWP.Infrastructure
                     FigureState figureOnPosition = GetFigureByPosition(potentialPosition);
 
                     if (potentialPosition.CheckIfOutsideTheBoard() ||
-                        figureOnPosition?.Color == figure.Color ||
-                        includeCheckmateState && !CheckIfMoveIsSaveForKing(figure, potentialPosition))
+                        figureOnPosition?.Color == figure.Color)
                     {
                         break;
+                    }
+                    else if (includeCheckmateState && !CheckIfMoveIsSaveForKing(figure, potentialPosition))
+                    {
+                        continue;
                     }
                     else if (CheckIfFigureCanMoveTo(figure, potentialPosition))
                     {
