@@ -6,7 +6,7 @@ namespace Chess_UWP.Infrastructure.GameProviderComponents.MoveTimer
     public class MoveTimer : IMoveTimer
     {
         public event TimerTickDelegate TimerTick;
-        public event EventHandler MoveEnds;
+        public event EventHandler TimeIsUp;
 
         private SynchronizationContext syncContext;
         private Timer moveTimer;
@@ -59,7 +59,7 @@ namespace Chess_UWP.Infrastructure.GameProviderComponents.MoveTimer
                 if (secondsLeft < 0)
                 {
                     motionHandler.FinalizeMove();
-                    MoveEnds(this, EventArgs.Empty);
+                    TimeIsUp(this, EventArgs.Empty);
                 }
             }, null);
         }

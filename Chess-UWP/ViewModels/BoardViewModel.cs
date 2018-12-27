@@ -136,7 +136,7 @@ namespace Chess_UWP.ViewModels
             IMoveTimer moveTimer = new MoveTimer(gameProvider);
             moveTimer.SetTimer(Parameter?.SecondsOnTurn ?? 0);
             moveTimer.TimerTick += TimerTick;
-            moveTimer.MoveEnds += MoveTimer_MoveEnds;
+            moveTimer.TimeIsUp += MoveTimer_MoveEnds;
             moveTimer.StartTimer();
 
             repository = IoC.Get<IRepository>();
