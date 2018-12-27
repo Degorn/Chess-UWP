@@ -38,8 +38,8 @@ namespace Chess_UWP.ViewModels
             }
         }
 
-        private ObservableCollection<string> pawnPromotionTypes = new ObservableCollection<string>();
-        public ObservableCollection<string> PawnPromotionTypes
+        private ObservableCollection<PawnPromotionType> pawnPromotionTypes = new ObservableCollection<PawnPromotionType>();
+        public ObservableCollection<PawnPromotionType> PawnPromotionTypes
         {
             get => pawnPromotionTypes;
             set
@@ -195,11 +195,11 @@ namespace Chess_UWP.ViewModels
 
         private void StartPawnPromition(object sender, PawnPromotionEventArgs e)
         {
-            PawnPromotionTypes = new ObservableCollection<string>(e.Types);
+            PawnPromotionTypes = new ObservableCollection<PawnPromotionType>(e.Types);
             IsPawnPromotion = true;
         }
 
-        public void PawnPromotion(string type)
+        public void PawnPromotion(PawnPromotionType type)
         {
             gameProvider.PromotePawn(type);
             IsPawnPromotion = false;

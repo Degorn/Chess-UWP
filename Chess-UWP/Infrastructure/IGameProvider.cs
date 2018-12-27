@@ -21,7 +21,7 @@ namespace Chess_UWP.Infrastructure
 
         CheckmateState GetCheckmateState();
 
-        void PromotePawn(string type);
+        void PromotePawn(PawnPromotionType type);
 
         void SetMoveTimer(int secondsOnMove);
         void StartMoveTimer();

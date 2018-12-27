@@ -16,6 +16,12 @@ namespace Chess_UWP.Infrastructure
     {
         Add, Remove
     }
+
+    public enum PawnPromotionType
+    {
+        Rook, Knight, Bishop, Queen
+    }
+
     public class CollectionChangedEventHandler : EventArgs
     {
         public ListChagesOperation Operation { get; set; }
@@ -47,7 +53,7 @@ namespace Chess_UWP.Infrastructure
 
     public class PawnPromotionEventArgs : EventArgs
     {
-        public IEnumerable<string> Types;
+        public IEnumerable<PawnPromotionType> Types;
     }
     public delegate void PawnPromotionDelegate(object sender, PawnPromotionEventArgs e);
 }

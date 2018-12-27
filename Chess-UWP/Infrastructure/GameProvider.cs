@@ -653,15 +653,15 @@ namespace Chess_UWP.Infrastructure
                    pawn.Color == Color.White && pawn.Position.Y == 0;
         }
 
-        private IEnumerable<string> GetPawnPromotionTypes()
+        private IEnumerable<PawnPromotionType> GetPawnPromotionTypes()
         {
-            return new string[]
+            return new PawnPromotionType[]
             {
-                "Rook", "Knight", "Bishop", "Queen"
+                PawnPromotionType.Rook, PawnPromotionType.Knight, PawnPromotionType.Bishop, PawnPromotionType.Queen
             };
         }
 
-        private void PromotePawnWith(FigureState pawn, Type figureType)
+        private void PromotePawnWith(FigureState pawn, PawnPromotionType figureType)
         {
             if (pawn.Figure.GetType() != typeof(Pawn))
             {
@@ -669,21 +669,30 @@ namespace Chess_UWP.Infrastructure
             }
 
             Figure figure;
-            Type type = figureType;
-            if (type == typeof(Rook)) figure = new Rook();
-            else if (type == typeof(Knight)) figure = new Knight();
-            else if (type == typeof(Bishop)) figure = new Bishop();
-            else if (type == typeof(Queen)) figure = new Queen();
-            else return;
+            switch (figureType)
+            {
+                case PawnPromotionType.Rook:
+                    figure = new Rook();
+                    break;
+                case PawnPromotionType.Knight:
+                    figure = new Knight();
+                    break;
+                case PawnPromotionType.Bishop:
+                    figure = new Bishop();
+                    break;
+                case PawnPromotionType.Queen:
+                    figure = new Queen();
+                    break;
+                default: return;
+            }
             
             AddFigure(figure, pawn.Position, pawn.Color);
             RemoveFigure(pawn);
         }
 
-        public void PromotePawn(string type)
+        public void PromotePawn(PawnPromotionType type)
         {
-            Type selectedType = Type.GetType($"Chess_UWP.Models.Figures.{type}");
-            PromotePawnWith(CurrentlySelectedFigure, selectedType);
+            PromotePawnWith(CurrentlySelectedFigure, type);
             MoveFinalizer();
         }
 
