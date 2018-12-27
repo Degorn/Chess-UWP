@@ -12,6 +12,7 @@ using Chess_UWP.Database;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
 using Chess_UWP.Infrastructure.GameProviderComponents.MoveTimer;
+using Chess_UWP.Infrastructure.GameProviderComponents;
 
 namespace Chess_UWP.ViewModels
 {
@@ -139,9 +140,10 @@ namespace Chess_UWP.ViewModels
             moveTimer.TimeIsUp += MoveTimer_MoveEnds;
             moveTimer.StartTimer();
 
-            repository = IoC.Get<IRepository>();
+            IMotionHandler motionHandler = GameProvider.Instance;
+            motionHandler.Move += GameProvider_LogMove;
 
-            gameProvider.Move += GameProvider_LogMove;
+            repository = IoC.Get<IRepository>();
         }
 
         private void MoveTimer_MoveEnds(object sender, EventArgs e)

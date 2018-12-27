@@ -1,5 +1,4 @@
-﻿using Caliburn.Micro;
-using Chess_UWP.Infrastructure.Initializers;
+﻿using Chess_UWP.Infrastructure.Initializers;
 using Chess_UWP.Models;
 using Chess_UWP.Models.Figures;
 using System;
@@ -25,7 +24,6 @@ namespace Chess_UWP.Infrastructure
                 return instance;
             }
         }
-
 
         private ICollection<FigureState> FiguresOnBoard { get; set; }
         public event CollectionChanged CollectionChanged;
