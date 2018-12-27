@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
+using Chess_UWP.Infrastructure.GameProviderComponents;
 using Chess_UWP.Models;
 using Windows.Foundation;
 
 namespace Chess_UWP.Infrastructure
 {
-    public interface IGameProvider
+    public interface IGameProvider : IMotionHandler
     {
         event CollectionChanged CollectionChanged;
         event GameOverDelegate GameOver;
         event PawnPromotionDelegate StartPawnPromotion;
-        event TimerTickDelegate TimerTick;
-        event MoveLogDelegate LogMove;
 
         FigureState CurrentlySelectedFigure { get; }
 
@@ -22,8 +21,5 @@ namespace Chess_UWP.Infrastructure
         CheckmateState GetCheckmateState();
 
         void PromotePawn(PawnPromotionType type);
-
-        void SetMoveTimer(int secondsOnMove);
-        void StartMoveTimer();
     }
 }

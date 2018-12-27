@@ -11,6 +11,7 @@ using System.Linq;
 using Chess_UWP.Database;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
+using Chess_UWP.Infrastructure.GameProviderComponents.MoveTimer;
 
 namespace Chess_UWP.ViewModels
 {
@@ -132,16 +133,23 @@ namespace Chess_UWP.ViewModels
                 });
             }
 
-            gameProvider.SetMoveTimer(Parameter?.SecondsOnTurn ?? 0);
-            gameProvider.TimerTick += TimerTick;
-            gameProvider.StartMoveTimer();
+            IMoveTimer moveTimer = new MoveTimer(gameProvider);
+            moveTimer.SetTimer(Parameter?.SecondsOnTurn ?? 0);
+            moveTimer.TimerTick += TimerTick;
+            moveTimer.MoveEnds += MoveTimer_MoveEnds;
+            moveTimer.StartTimer();
 
             repository = IoC.Get<IRepository>();
 
-            gameProvider.LogMove += GameProvider_LogMove;
+            gameProvider.Move += GameProvider_LogMove;
         }
 
-        private void GameProvider_LogMove(object sender, MoveLogEventArgs e)
+        private void MoveTimer_MoveEnds(object sender, EventArgs e)
+        {
+            FigurePositions.Clear();
+        }
+
+        private void GameProvider_LogMove(object sender, MoveEventArgs e)
         {
             Moves.Add(new Move
             {

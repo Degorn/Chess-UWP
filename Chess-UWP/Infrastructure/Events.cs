@@ -42,14 +42,14 @@ namespace Chess_UWP.Infrastructure
     }
     public delegate void TimerTickDelegate(object sender, TimerTickEventArgs e);
 
-    public class MoveLogEventArgs : EventArgs
+    public class MoveEventArgs : EventArgs
     {
         public Figure Figure { get; set; }
         public Board.Color Color { get; set; }
         public Point StartPosition { get; set; }
         public Point EndPosition { get; set; }
     }
-    public delegate void MoveLogDelegate(object sender, MoveLogEventArgs e);
+    public delegate void MoveDelegate(object sender, MoveEventArgs e);
 
     public class PawnPromotionEventArgs : EventArgs
     {

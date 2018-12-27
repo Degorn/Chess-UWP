@@ -49,7 +49,6 @@ namespace Chess_UWP.Infrastructure
         {
             this.figuresInitializer = figuresInitializer;
             FiguresOnBoard = figuresInitializer.GetFigures().ToList();
-            syncContext = SynchronizationContext.Current;
 
             StartGameTimer();
         }
@@ -240,10 +239,10 @@ namespace Chess_UWP.Infrastructure
             }
 
             // Player switching and checking checkmate state.
-            MoveFinalizer();
+            FinalizeMove();
         }
 
-        private void MoveFinalizer()
+        public void FinalizeMove()
         {
             SwitchPlayer();
 
@@ -257,7 +256,7 @@ namespace Chess_UWP.Infrastructure
                 });
             }
 
-            LogMove(this, new MoveLogEventArgs
+            Move(this, new MoveEventArgs
             {
                 Figure = currentlySelectedFigure.Figure,
                 Color = currentlySelectedFigure.Color,
@@ -332,8 +331,6 @@ namespace Chess_UWP.Infrastructure
             {
                 CurrentlySelectedFigure = null;
             }
-
-            ResetMoveTimer();
         }
 
         #endregion
@@ -689,7 +686,7 @@ namespace Chess_UWP.Infrastructure
         public void PromotePawn(PawnPromotionType type)
         {
             PromotePawnWith(CurrentlySelectedFigure, type);
-            MoveFinalizer();
+            FinalizeMove();
         }
 
         #endregion
@@ -722,53 +719,6 @@ namespace Chess_UWP.Infrastructure
         private Timer gameTimer;
         private int gameLengthInSeconds;
 
-        private SynchronizationContext syncContext;
-        private Timer moveTimer;
-        public int SecondsOnMove { get; private set; }
-        private int secondsLeft;
-
-        public event TimerTickDelegate TimerTick;
-
-        private void MoveTimerTick(object state)
-        {
-            syncContext.Post(a =>
-            {
-                TimerTick?.Invoke(this, new TimerTickEventArgs { SecondsLeft = secondsLeft });
-                secondsLeft--;
-                if (secondsLeft < 0)
-                {
-                    MoveFinalizer();
-                }
-            }, null);
-        }
-
-        public void SetMoveTimer(int secondsOnMove)
-        {
-            SecondsOnMove = secondsOnMove;
-        }
-
-        public void StartMoveTimer()
-        {
-            if (SecondsOnMove == 0)
-            {
-                return;
-            }
-
-            secondsLeft = SecondsOnMove;
-            moveTimer = new Timer(MoveTimerTick, null, 1000, 1000);
-        }
-
-        private void StopMoveTimer()
-        {
-            moveTimer?.Dispose();
-        }
-
-        private void ResetMoveTimer()
-        {
-            StopMoveTimer();
-            StartMoveTimer();
-        }
-
         private void StartGameTimer()
         {
             gameLengthInSeconds = 0;
@@ -789,7 +739,7 @@ namespace Chess_UWP.Infrastructure
 
         #region Move logger
 
-        public event MoveLogDelegate LogMove;
+        public event MoveDelegate Move;
 
         private Point figureStartPosition;
 

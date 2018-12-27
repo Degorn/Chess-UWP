@@ -1,6 +1,8 @@
 ﻿using Caliburn.Micro;
 using Chess_UWP.Database;
 using Chess_UWP.Infrastructure;
+using Chess_UWP.Infrastructure.GameProviderComponents;
+using Chess_UWP.Infrastructure.GameProviderComponents.MoveTimer;
 using Chess_UWP.Infrastructure.Initializers;
 using Chess_UWP.ViewModels;
 using Chess_UWP.Views;
@@ -48,7 +50,8 @@ namespace Chess_UWP
                 Singleton<IFiguresInitializer, FiguresInitializer>().
                 Singleton<ChessDbContext>().
                 Singleton<IRepository, Repository>().
-                Singleton<IGameProvider, GameProvider>();
+                Singleton<IGameProvider, GameProvider>().
+                Singleton<IMoveTimer, MoveTimer>();
         }
 
         protected override void PrepareViewFirst(Frame rootFrame)
@@ -74,7 +77,7 @@ namespace Chess_UWP
             if (e.PreviousExecutionState == ApplicationExecutionState.Running)
                 return;
 
-            DisplayRootView<MainMenuView>();
+            DisplayRootView<NewGameSettingsView>();
         }
 
 
