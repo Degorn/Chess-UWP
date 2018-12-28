@@ -2,6 +2,8 @@
 using Chess_UWP.Database;
 using Chess_UWP.Infrastructure;
 using Chess_UWP.Infrastructure.GameProviderComponents;
+using Chess_UWP.Infrastructure.GameProviderComponents.GameTimer;
+using Chess_UWP.Infrastructure.GameProviderComponents.Logger;
 using Chess_UWP.Infrastructure.GameProviderComponents.MoveTimer;
 using Chess_UWP.Infrastructure.Initializers;
 using Chess_UWP.ViewModels;
@@ -51,7 +53,9 @@ namespace Chess_UWP
                 Singleton<ChessDbContext>().
                 Singleton<IRepository, Repository>().
                 Singleton<IGameProvider, GameProvider>().
-                Singleton<IMoveTimer, MoveTimer>();
+                Singleton<IMoveTimer, MoveTimer>().
+                Singleton<ILogger, Logger>().
+                Singleton<IGameTimer, GameTimer>();
         }
 
         protected override void PrepareViewFirst(Frame rootFrame)

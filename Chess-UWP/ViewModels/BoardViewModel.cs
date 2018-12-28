@@ -12,7 +12,10 @@ using Chess_UWP.Database;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
 using Chess_UWP.Infrastructure.GameProviderComponents.MoveTimer;
+using Chess_UWP.Infrastructure.GameProviderComponents.PlayersContainer;
 using Chess_UWP.Infrastructure.GameProviderComponents;
+using Chess_UWP.Infrastructure.GameProviderComponents.Logger;
+using Chess_UWP.Infrastructure.GameProviderComponents.GameTimer;
 
 namespace Chess_UWP.ViewModels
 {
@@ -101,7 +104,7 @@ namespace Chess_UWP.ViewModels
         private IGameProvider gameProvider;
         private IMoveTimer moveTimer;
         private IRepository repository;
-        Player playerWhite, playerBlack;
+        string playerWhite, playerBlack;
 
         public BoardViewModel(INavigationService pageNavigationService) : base(pageNavigationService)
         {
@@ -116,14 +119,10 @@ namespace Chess_UWP.ViewModels
 
         protected override void OnActivate()
         {
-            playerWhite = new Player(string.IsNullOrEmpty(Parameter?.FirstUserName) ? "Player 1" : Parameter.FirstUserName, Color.White);
-            playerBlack = new Player(string.IsNullOrEmpty(Parameter?.SecondUserName) ? "Player 2" : Parameter.SecondUserName, Color.Black);
-            IFiguresInitializer figuresInitializer = IoC.Get<IFiguresInitializer>();
-
-            gameProvider = new GameProvider(figuresInitializer, new Player[] { playerWhite, playerBlack });
+            gameProvider = IoC.Get<IGameProvider>();
             gameProvider.CollectionChanged += CollectionChanged;
             gameProvider.StartPawnPromotion += StartPawnPromition;
-            gameProvider.GameOver += GameOverAsync;
+            gameProvider.GameStart += GameProvider_GameStart;
 
             Figures = new ObservableCollection<FigureViewModel>();
             IEnumerable<FigureState> figures = gameProvider.GetFigures();
@@ -135,16 +134,30 @@ namespace Chess_UWP.ViewModels
                 });
             }
 
-            moveTimer = new MoveTimer(GameProvider.Instance);
+            IGameTimer gameTimer = new GameTimer(gameProvider.Instance);
+
+            moveTimer = new MoveTimer(IoC.Get<IGameProvider>());
             moveTimer.SetTimer(Parameter?.SecondsOnTurn ?? 0);
             moveTimer.TimerTick += TimerTick;
             moveTimer.TimeIsUp += MoveTimer_TimeIsUp;
-            moveTimer.StartTimer();
 
-            IMotionHandler motionHandler = GameProvider.Instance;
+            IMotionHandler motionHandler = IoC.Get<IGameProvider>();
             motionHandler.Move += GameProvider_LogMove;
 
+            playerWhite = string.IsNullOrEmpty(Parameter?.FirstUserName) ? "Player 1" : Parameter.FirstUserName;
+            playerBlack = string.IsNullOrEmpty(Parameter?.SecondUserName) ? "Player 2" : Parameter.SecondUserName;
+            IPlayersContainer playersContainer = IoC.Get<IGameProvider>();
+            playersContainer.SetPlayers(playerWhite, playerBlack);
+
+            ILogger logger = new Logger(gameProvider.Instance, gameTimer);
+            logger.GameOver += GameOverAsync;
+
             repository = IoC.Get<IRepository>();
+        }
+
+        private void GameProvider_GameStart(object sender, EventArgs e)
+        {
+            moveTimer.StartTimer();
         }
 
         private void MoveTimer_TimeIsUp(object sender, EventArgs e)
@@ -216,7 +229,7 @@ namespace Chess_UWP.ViewModels
             IsPawnPromotion = false;
         }
 
-        private async Task GameOverAsync(object sender, GameOverEventArgs e)
+        private async void GameOverAsync(object sender, GameOverEventArgs e)
         {
             await ShowGameOverDialogAsync(e);
             await SaveResultAsync(e);
@@ -236,8 +249,8 @@ namespace Chess_UWP.ViewModels
         {
             await repository.AddAsync(new GameInfo
             {
-                FirstPlayerName = playerWhite.Name,
-                SecondPlayerName = playerBlack.Name,
+                FirstPlayerName = playerWhite,
+                SecondPlayerName = playerBlack,
                 GameLength = e.GameLength,
                 Winner = e.Winner.Name,
                 Date = DateTime.Now

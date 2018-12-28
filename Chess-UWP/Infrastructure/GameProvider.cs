@@ -4,7 +4,6 @@ using Chess_UWP.Models.Figures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Windows.Foundation;
 using static Chess_UWP.Models.Board;
 
@@ -12,8 +11,8 @@ namespace Chess_UWP.Infrastructure
 {
     public class GameProvider : IGameProvider
     {
-        private static GameProvider instance;
-        public static GameProvider Instance
+        private static IGameProvider instance;
+        public IGameProvider Instance
         {
             get
             {
@@ -25,13 +24,13 @@ namespace Chess_UWP.Infrastructure
             }
         }
 
+        public event EventHandler GameStart;
+        public event GameOverDelegate GameOver;
+
         private ICollection<FigureState> FiguresOnBoard { get; set; }
         public event CollectionChanged CollectionChanged;
 
-        private int playerId = 0;
-        private readonly Player[] players;
-        private Player CurrentPlayer => players?[playerId];
-        private Player EnemyPlayer => players?.FirstOrDefault(p => p != CurrentPlayer);
+        private bool gameStarted;
 
         private FigureState currentlySelectedFigure;
         public FigureState CurrentlySelectedFigure
@@ -56,8 +55,6 @@ namespace Chess_UWP.Infrastructure
 
         private readonly IFiguresInitializer figuresInitializer;
 
-        #region Constructors
-
         public GameProvider(IFiguresInitializer figuresInitializer)
         {
             this.figuresInitializer = figuresInitializer;
@@ -65,15 +62,12 @@ namespace Chess_UWP.Infrastructure
 
             instance = this;
 
-            StartGameTimer();
+            players = new Player[]
+            {
+                new Player("", Color.White),
+                new Player("", Color.Black),
+            };
         }
-
-        public GameProvider(IFiguresInitializer figuresInitializer, Player[] players) : this(figuresInitializer)
-        {
-            this.players = players;
-        }
-
-        #endregion
 
         #region Helpers
 
@@ -287,6 +281,12 @@ namespace Chess_UWP.Infrastructure
             }
 
             ResetState();
+
+            if (!gameStarted)
+            {
+                GameStart?.Invoke(this, EventArgs.Empty);
+                gameStarted = true;
+            }
         }
 
         private bool CheckIfFigureCanMoveTo(FigureState figure, Point potentialPosition)
@@ -333,20 +333,6 @@ namespace Chess_UWP.Infrastructure
             return false;
         }
 
-        private void SwitchPlayer()
-        {
-            if (players == null || players.Length == 0)
-            {
-                return;
-            }
-
-            playerId++;
-            if (playerId >= players.Length)
-            {
-                playerId = 0;
-            }
-        }
-
         private void ResetState()
         {
             if (CurrentlySelectedFigure != null)
@@ -362,7 +348,6 @@ namespace Chess_UWP.Infrastructure
             GameOver(this, new GameOverEventArgs
             {
                 Winner = EnemyPlayer,
-                GameLength = TimeSpan.FromSeconds(gameLengthInSeconds).ToString(@"hh\:mm\:ss")
             });
         }
 
@@ -459,8 +444,6 @@ namespace Chess_UWP.Infrastructure
         #endregion
 
         #region Checkmate state
-
-        public event GameOverDelegate GameOver;
 
         private IEnumerable<Direction> GetAllFiguresDirectionsByColor(Color color)
         {
@@ -750,24 +733,24 @@ namespace Chess_UWP.Infrastructure
 
         #region Timer
 
-        private Timer gameTimer;
-        private int gameLengthInSeconds;
+        //private Timer gameTimer;
+        //private int gameLengthInSeconds;
 
-        private void StartGameTimer()
-        {
-            gameLengthInSeconds = 0;
-            gameTimer = new Timer(GameTimerTick, null, 1000, 1000);
-        }
+        //private void StartGameTimer()
+        //{
+        //    gameLengthInSeconds = 0;
+        //    gameTimer = new Timer(GameTimerTick, null, 1000, 1000);
+        //}
 
-        private void GameTimerTick(object state)
-        {
-            gameLengthInSeconds++;
-        }
+        //private void GameTimerTick(object state)
+        //{
+        //    gameLengthInSeconds++;
+        //}
 
-        private void StopGameTimer()
-        {
-            gameTimer?.Dispose();
-        }
+        //private void StopGameTimer()
+        //{
+        //    gameTimer?.Dispose();
+        //}
 
         #endregion
 
@@ -781,6 +764,35 @@ namespace Chess_UWP.Infrastructure
         private Point AdaptPositionToBoard(Point position)
         {
             return new Point(position.X, Board.BOARD_HEIGHT - position.Y);
+        }
+
+        #endregion
+
+        #region Players
+
+        private int playerId = 0;
+        private readonly Player[] players;
+        private Player CurrentPlayer => players?[playerId];
+        private Player EnemyPlayer => players?.FirstOrDefault(p => p != CurrentPlayer);
+
+        public void SetPlayers(string firstPlayer, string secondPlayer)
+        {
+            players[0].Name = firstPlayer;
+            players[1].Name = secondPlayer;
+        }
+
+        private void SwitchPlayer()
+        {
+            if (players == null || players.Length == 0)
+            {
+                return;
+            }
+
+            playerId++;
+            if (playerId >= players.Length)
+            {
+                playerId = 0;
+            }
         }
 
         #endregion

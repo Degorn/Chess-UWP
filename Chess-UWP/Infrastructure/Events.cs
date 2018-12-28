@@ -34,7 +34,7 @@ namespace Chess_UWP.Infrastructure
         public Player Winner { get; set; }
         public string GameLength { get; set; }
     }
-    public delegate Task GameOverDelegate(object sender, GameOverEventArgs e);
+    public delegate void GameOverDelegate(object sender, GameOverEventArgs e);
 
     public class TimerTickEventArgs : EventArgs
     {
