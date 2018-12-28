@@ -731,29 +731,6 @@ namespace Chess_UWP.Infrastructure
 
         #endregion
 
-        #region Timer
-
-        //private Timer gameTimer;
-        //private int gameLengthInSeconds;
-
-        //private void StartGameTimer()
-        //{
-        //    gameLengthInSeconds = 0;
-        //    gameTimer = new Timer(GameTimerTick, null, 1000, 1000);
-        //}
-
-        //private void GameTimerTick(object state)
-        //{
-        //    gameLengthInSeconds++;
-        //}
-
-        //private void StopGameTimer()
-        //{
-        //    gameTimer?.Dispose();
-        //}
-
-        #endregion
-
         #region Move logger
 
         public event MoveDelegate Move;
