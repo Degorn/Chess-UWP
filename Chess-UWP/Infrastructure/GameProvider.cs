@@ -42,6 +42,11 @@ namespace Chess_UWP.Infrastructure
 
         private readonly IFiguresInitializer figuresInitializer;
 
+        public event MovingDelegate Moving;
+        public event MovedDelegate Moved;
+        private bool moved;
+        private Point figureStartPosition;
+
         public GameProvider(IFiguresInitializer figuresInitializer)
         {
             this.figuresInitializer = figuresInitializer;
@@ -246,9 +251,9 @@ namespace Chess_UWP.Infrastructure
             {
                 Moved(this, new MovedEventArgs
                 {
-                    // TO DO: Transfer responsibility AdaptPosition to logger.
                     Figure = currentlySelectedFigure,
-                    StartPosition = AdaptPositionToBoard(figureStartPosition),
+                    StartPosition = figureStartPosition,
+                    EndPosition = currentlySelectedFigure.Position,
                 });
             }
 
@@ -647,23 +652,6 @@ namespace Chess_UWP.Infrastructure
                 CurrentlySelectedFigure?.Figure is Pawn &&
                 CurrentlySelectedFigure?.Color != enPassantPawn.Color &&
                 potentialPosition == enPassantPosition;
-        }
-
-        #endregion
-
-        #region Move logger
-
-        //public event MoveDelegate Move;
-
-        public event MovingDelegate Moving;
-        public event MovedDelegate Moved;
-
-        private bool moved;
-        private Point figureStartPosition;
-
-        private Point AdaptPositionToBoard(Point position)
-        {
-            return new Point(position.X, Board.BOARD_HEIGHT - position.Y);
         }
 
         #endregion

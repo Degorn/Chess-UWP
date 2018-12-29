@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using static Chess_UWP.Models.Board;
 
 namespace Chess_UWP.Infrastructure
 {
@@ -53,6 +54,7 @@ namespace Chess_UWP.Infrastructure
     {
         public FigureState Figure { get; set; }
         public Point StartPosition { get; set; }
+        public Point EndPosition { get; set; }
     }
     public delegate void MovedDelegate(object sender, MovedEventArgs e);
 

@@ -125,9 +125,6 @@ namespace Chess_UWP.ViewModels
             gameProvider.CollectionChanged += CollectionChanged;
             gameProvider.GameStart += GameProvider_GameStart;
 
-            pawnPromoter = IoC.Get<IPawnPromoter>();
-            pawnPromoter.StartPawnPromotion += StartPawnPromition;
-
             Figures = new ObservableCollection<FigureViewModel>();
             IEnumerable<FigureState> figures = gameProvider.GetFigures();
             foreach (FigureState figure in figures)
@@ -138,23 +135,24 @@ namespace Chess_UWP.ViewModels
                 });
             }
 
-            IGameTimer gameTimer = new GameTimer(IoC.Get<IGameProvider>());
+            pawnPromoter = IoC.Get<IPawnPromoter>();
+            pawnPromoter.StartPawnPromotion += StartPawnPromition;
 
             moveTimer = new MoveTimer(IoC.Get<IGameProvider>());
             moveTimer.SetTimer(Parameter?.SecondsOnTurn ?? 0);
             moveTimer.TimerTick += TimerTick;
             moveTimer.TimeIsUp += MoveTimer_TimeIsUp;
 
-            IMotionHandler motionHandler = IoC.Get<IGameProvider>();
-            motionHandler.Moved += GameProvider_LogMove;
-
             playerWhite = string.IsNullOrEmpty(Parameter?.FirstUserName) ? "Player 1" : Parameter.FirstUserName;
             playerBlack = string.IsNullOrEmpty(Parameter?.SecondUserName) ? "Player 2" : Parameter.SecondUserName;
             IPlayersContainer playersContainer = IoC.Get<IGameProvider>();
             playersContainer.SetPlayers(playerWhite, playerBlack);
 
+            IGameTimer gameTimer = new GameTimer(IoC.Get<IGameProvider>());
+
             ILogger logger = new Logger(IoC.Get<IGameProvider>(), gameTimer);
             logger.GameOver += GameOverAsync;
+            logger.Moved += LogMove;
 
             repository = IoC.Get<IRepository>();
         }
@@ -169,14 +167,14 @@ namespace Chess_UWP.ViewModels
             FigurePositions.Clear();
         }
 
-        private void GameProvider_LogMove(object sender, MovedEventArgs e)
+        private void LogMove(object sender, MovedEventArgs e)
         {
             Moves.Add(new Move
             {
                 Figure = e.Figure.Figure,
                 Color = e.Figure.Color,
                 StartPosition = e.StartPosition,
-                EndPosition = e.Figure.Position
+                EndPosition = e.EndPosition
             });
         }
 

@@ -1,5 +1,7 @@
 ﻿using System;
 using Chess_UWP.Infrastructure.GameProviderComponents.GameTimer;
+using Chess_UWP.Models;
+using Windows.Foundation;
 
 namespace Chess_UWP.Infrastructure.GameProviderComponents.Logger
 {
@@ -7,6 +9,8 @@ namespace Chess_UWP.Infrastructure.GameProviderComponents.Logger
     {
         public event EventHandler GameStart;
         public event GameOverDelegate GameOver;
+        public event MovingDelegate Moving;
+        public event MovedDelegate Moved;
 
         private readonly IGameProvider gameProvider;
         private readonly IGameTimer gameTimer;
@@ -18,6 +22,7 @@ namespace Chess_UWP.Infrastructure.GameProviderComponents.Logger
 
             this.gameProvider.GameStart += GameProvider_GameStart;
             this.gameProvider.GameOver += GameProvider_GameOver;
+            this.gameProvider.Moved += GameProvider_Moved;
         }
 
         private void GameProvider_GameStart(object sender, EventArgs e)
@@ -28,7 +33,24 @@ namespace Chess_UWP.Infrastructure.GameProviderComponents.Logger
         private void GameProvider_GameOver(object sender, GameOverEventArgs e)
         {
             e.GameLength = TimeSpan.FromSeconds(gameTimer.GetTheElapsedTime()).ToString(@"hh\:mm\:ss");
-            GameOver(sender, e);
+            GameOver?.Invoke(sender, e);
+        }
+
+        public void FinalizeMove()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void GameProvider_Moved(object sender, MovedEventArgs e)
+        {
+            e.StartPosition = AdaptPositionToBoard(e.StartPosition);
+            e.EndPosition = AdaptPositionToBoard(e.EndPosition);
+            Moved?.Invoke(sender, e);
+        }
+
+        private Point AdaptPositionToBoard(Point position)
+        {
+            return new Point(position.X, Board.BOARD_HEIGHT - position.Y);
         }
     }
 }
