@@ -5,6 +5,7 @@ using Chess_UWP.Infrastructure.GameProviderComponents;
 using Chess_UWP.Infrastructure.GameProviderComponents.GameTimer;
 using Chess_UWP.Infrastructure.GameProviderComponents.Logger;
 using Chess_UWP.Infrastructure.GameProviderComponents.MoveTimer;
+using Chess_UWP.Infrastructure.GameProviderComponents.PawnPromoter;
 using Chess_UWP.Infrastructure.Initializers;
 using Chess_UWP.ViewModels;
 using Chess_UWP.Views;
@@ -55,6 +56,7 @@ namespace Chess_UWP
                 Singleton<IGameProvider, GameProvider>().
                 Singleton<IMoveTimer, MoveTimer>().
                 Singleton<ILogger, Logger>().
+                Singleton<IPawnPromoter, PawnPromoter>().
                 Singleton<IGameTimer, GameTimer>();
         }
 

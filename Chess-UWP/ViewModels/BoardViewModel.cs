@@ -16,6 +16,7 @@ using Chess_UWP.Infrastructure.GameProviderComponents.PlayersContainer;
 using Chess_UWP.Infrastructure.GameProviderComponents;
 using Chess_UWP.Infrastructure.GameProviderComponents.Logger;
 using Chess_UWP.Infrastructure.GameProviderComponents.GameTimer;
+using Chess_UWP.Infrastructure.GameProviderComponents.PawnPromoter;
 
 namespace Chess_UWP.ViewModels
 {
@@ -102,6 +103,7 @@ namespace Chess_UWP.ViewModels
 
         public GameStartSettings Parameter { get; set; }
         private IGameProvider gameProvider;
+        private IPawnPromoter pawnPromoter;
         private IMoveTimer moveTimer;
         private IRepository repository;
         string playerWhite, playerBlack;
@@ -121,8 +123,10 @@ namespace Chess_UWP.ViewModels
         {
             gameProvider = IoC.Get<IGameProvider>();
             gameProvider.CollectionChanged += CollectionChanged;
-            gameProvider.StartPawnPromotion += StartPawnPromition;
             gameProvider.GameStart += GameProvider_GameStart;
+
+            pawnPromoter = IoC.Get<IPawnPromoter>();
+            pawnPromoter.StartPawnPromotion += StartPawnPromition;
 
             Figures = new ObservableCollection<FigureViewModel>();
             IEnumerable<FigureState> figures = gameProvider.GetFigures();
@@ -134,7 +138,7 @@ namespace Chess_UWP.ViewModels
                 });
             }
 
-            IGameTimer gameTimer = new GameTimer(gameProvider.Instance);
+            IGameTimer gameTimer = new GameTimer(IoC.Get<IGameProvider>());
 
             moveTimer = new MoveTimer(IoC.Get<IGameProvider>());
             moveTimer.SetTimer(Parameter?.SecondsOnTurn ?? 0);
@@ -142,14 +146,14 @@ namespace Chess_UWP.ViewModels
             moveTimer.TimeIsUp += MoveTimer_TimeIsUp;
 
             IMotionHandler motionHandler = IoC.Get<IGameProvider>();
-            motionHandler.Move += GameProvider_LogMove;
+            motionHandler.Moved += GameProvider_LogMove;
 
             playerWhite = string.IsNullOrEmpty(Parameter?.FirstUserName) ? "Player 1" : Parameter.FirstUserName;
             playerBlack = string.IsNullOrEmpty(Parameter?.SecondUserName) ? "Player 2" : Parameter.SecondUserName;
             IPlayersContainer playersContainer = IoC.Get<IGameProvider>();
             playersContainer.SetPlayers(playerWhite, playerBlack);
 
-            ILogger logger = new Logger(gameProvider.Instance, gameTimer);
+            ILogger logger = new Logger(IoC.Get<IGameProvider>(), gameTimer);
             logger.GameOver += GameOverAsync;
 
             repository = IoC.Get<IRepository>();
@@ -165,14 +169,14 @@ namespace Chess_UWP.ViewModels
             FigurePositions.Clear();
         }
 
-        private void GameProvider_LogMove(object sender, MoveEventArgs e)
+        private void GameProvider_LogMove(object sender, MovedEventArgs e)
         {
             Moves.Add(new Move
             {
-                Figure = e.Figure,
-                Color = e.Color,
+                Figure = e.Figure.Figure,
+                Color = e.Figure.Color,
                 StartPosition = e.StartPosition,
-                EndPosition = e.EndPosition
+                EndPosition = e.Figure.Position
             });
         }
 
@@ -225,7 +229,7 @@ namespace Chess_UWP.ViewModels
 
         public void PawnPromotion(PawnPromotionType type)
         {
-            gameProvider.PromotePawn(type);
+            pawnPromoter.PromotePawn(type);
             IsPawnPromotion = false;
         }
 

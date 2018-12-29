@@ -2,7 +2,8 @@
 {
     public interface IMotionHandler
     {
-        event MoveDelegate Move;
+        event MovingDelegate Moving;
+        event MovedDelegate Moved;
 
         void FinalizeMove();
     }

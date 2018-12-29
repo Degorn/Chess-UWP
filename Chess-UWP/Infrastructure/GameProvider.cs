@@ -11,24 +11,11 @@ namespace Chess_UWP.Infrastructure
 {
     public class GameProvider : IGameProvider
     {
-        private static IGameProvider instance;
-        public IGameProvider Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    throw new Exception("Object not created.");
-                }
-                return instance;
-            }
-        }
-
         public event EventHandler GameStart;
         public event GameOverDelegate GameOver;
+        public event CollectionChanged CollectionChanged;
 
         private ICollection<FigureState> FiguresOnBoard { get; set; }
-        public event CollectionChanged CollectionChanged;
 
         private bool gameStarted;
 
@@ -60,8 +47,6 @@ namespace Chess_UWP.Infrastructure
             this.figuresInitializer = figuresInitializer;
             FiguresOnBoard = figuresInitializer.GetFigures().ToList();
 
-            instance = this;
-
             players = new Player[]
             {
                 new Player("", Color.White),
@@ -86,7 +71,7 @@ namespace Chess_UWP.Infrastructure
             return FiguresOnBoard.FirstOrDefault(f => f.Figure.GetType() == typeof(King) && f.Color == color);
         }
 
-        private void AddFigure(Figure figure, Point position, Color color)
+        public void AddFigure(Figure figure, Point position, Color color)
         {
             FigureState newFigure = figuresInitializer.GetFigure(figure, position, color);
             FiguresOnBoard.Add(newFigure);
@@ -97,7 +82,7 @@ namespace Chess_UWP.Infrastructure
             });
         }
 
-        private void RemoveFigure(FigureState figure)
+        public void RemoveFigure(FigureState figure)
         {
             FiguresOnBoard.Remove(figure);
             CollectionChanged(this, new CollectionChangedEventHandler
@@ -206,6 +191,12 @@ namespace Chess_UWP.Infrastructure
                 return;
             }
 
+            Moving?.Invoke(this, new MovingEventArgs
+            {
+                Figure = figure,
+                PotentionalPosition = position
+            });
+
             // Castling.
             if (CheckIfTryingToCastle(position))
             {
@@ -238,16 +229,6 @@ namespace Chess_UWP.Infrastructure
             figure.Figure.Step();
             moved = true;
 
-            // Pawn promotion.
-            if (CheckPawnPromotion(figure))
-            {
-                StartPawnPromotion(this, new PawnPromotionEventArgs
-                {
-                    Types = GetPawnPromotionTypes()
-                });
-                return;
-            }
-
             // Player switching and checking checkmate state.
             FinalizeMove();
         }
@@ -263,12 +244,11 @@ namespace Chess_UWP.Infrastructure
 
             if (currentlySelectedFigure != null && moved)
             {
-                Move(this, new MoveEventArgs
+                Moved(this, new MovedEventArgs
                 {
-                    Figure = currentlySelectedFigure.Figure,
-                    Color = currentlySelectedFigure.Color,
+                    // TO DO: Transfer responsibility AdaptPosition to logger.
+                    Figure = currentlySelectedFigure,
                     StartPosition = AdaptPositionToBoard(figureStartPosition),
-                    EndPosition = AdaptPositionToBoard(currentlySelectedFigure.Position)
                 });
             }
 
@@ -647,66 +627,6 @@ namespace Chess_UWP.Infrastructure
 
         #endregion
 
-        #region Pawn promotion
-
-        public event PawnPromotionDelegate StartPawnPromotion;
-
-        private bool CheckPawnPromotion(FigureState pawn)
-        {
-            if (pawn.Figure.GetType() != typeof(Pawn))
-            {
-                return false;
-            }
-
-            return pawn.Color == Color.Black && pawn.Position.Y == BOARD_HEIGHT - 1 ||
-                   pawn.Color == Color.White && pawn.Position.Y == 0;
-        }
-
-        private IEnumerable<PawnPromotionType> GetPawnPromotionTypes()
-        {
-            return new PawnPromotionType[]
-            {
-                PawnPromotionType.Rook, PawnPromotionType.Knight, PawnPromotionType.Bishop, PawnPromotionType.Queen
-            };
-        }
-
-        private void PromotePawnWith(FigureState pawn, PawnPromotionType figureType)
-        {
-            if (pawn.Figure.GetType() != typeof(Pawn))
-            {
-                return;
-            }
-
-            Figure figure;
-            switch (figureType)
-            {
-                case PawnPromotionType.Rook:
-                    figure = new Rook();
-                    break;
-                case PawnPromotionType.Knight:
-                    figure = new Knight();
-                    break;
-                case PawnPromotionType.Bishop:
-                    figure = new Bishop();
-                    break;
-                case PawnPromotionType.Queen:
-                    figure = new Queen();
-                    break;
-                default: return;
-            }
-            
-            AddFigure(figure, pawn.Position, pawn.Color);
-            RemoveFigure(pawn);
-        }
-
-        public void PromotePawn(PawnPromotionType type)
-        {
-            PromotePawnWith(CurrentlySelectedFigure, type);
-            FinalizeMove();
-        }
-
-        #endregion
-
         #region En passant
 
         private FigureState enPassantPawn;
@@ -733,7 +653,10 @@ namespace Chess_UWP.Infrastructure
 
         #region Move logger
 
-        public event MoveDelegate Move;
+        //public event MoveDelegate Move;
+
+        public event MovingDelegate Moving;
+        public event MovedDelegate Moved;
 
         private bool moved;
         private Point figureStartPosition;

@@ -20,10 +20,10 @@ namespace Chess_UWP.Infrastructure.GameProviderComponents.MoveTimer
             syncContext = SynchronizationContext.Current;
 
             this.motionHandler = motionHandler;
-            this.motionHandler.Move += RestartTimer;  
+            this.motionHandler.Moved += RestartTimer;  
         }
 
-        private void RestartTimer(object sender, MoveEventArgs e)
+        private void RestartTimer(object sender, MovedEventArgs e)
         {
             StartTimer();
         }
