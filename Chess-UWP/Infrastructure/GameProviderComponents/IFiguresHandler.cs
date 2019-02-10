@@ -1,5 +1,6 @@
 ﻿using Chess_UWP.Models;
 using Chess_UWP.Models.Figures;
+using System;
 using System.Collections.Generic;
 using Windows.Foundation;
 using static Chess_UWP.Models.Board;

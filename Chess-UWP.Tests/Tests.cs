@@ -22,7 +22,7 @@ namespace Chess_UWP.Tests
         {
             IFiguresInitializer figuresInitializer = new FiguresInitializer(new FiguresimagesInitializerDefault());
 
-            gameProvider = new GameProvider(figuresInitializer, new Player[] { new Player("P1", Color.White), new Player("P2", Color.Black) });
+            gameProvider = new GameProvider(figuresInitializer);
         }
 
         #region Helpers

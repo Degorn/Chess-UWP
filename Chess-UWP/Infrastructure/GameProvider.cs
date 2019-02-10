@@ -160,12 +160,15 @@ namespace Chess_UWP.Infrastructure
                     yield return position;
                 }
             }
-            
+
             // Add castling position;
-            IEnumerable<Point> castlingPositions = GetCastlingPositions(figure);
-            foreach (Point castlingPosition in castlingPositions)
+            //if (!includeCheckmateState && GetCheckmateState() == CheckmateState.None)
             {
-                yield return castlingPosition;
+                IEnumerable<Point> castlingPositions = GetCastlingPositions(figure);
+                foreach (Point castlingPosition in castlingPositions)
+                {
+                    yield return castlingPosition;
+                }
             }
         }
 
@@ -420,8 +423,11 @@ namespace Chess_UWP.Infrastructure
                 if (isPathClear)
                 {
                     Point kingsPotentialPosition = kingOnBoard.Position.Add(additionalVector);
-                    castlingConditions.Add(new Tuple<FigureState, Point>(kingOnBoard, kingsPotentialPosition), new Tuple<FigureState, Point>(rook, additionalRooksPotentialPosition));
-                    yield return kingsPotentialPosition;
+                    //if (CheckIfMoveIsSaveForKing(kingOnBoard, kingsPotentialPosition))
+                    {
+                        castlingConditions.Add(new Tuple<FigureState, Point>(kingOnBoard, kingsPotentialPosition), new Tuple<FigureState, Point>(rook, additionalRooksPotentialPosition));
+                        yield return kingsPotentialPosition;
+                    }
                 }
             }
         }
@@ -517,7 +523,7 @@ namespace Chess_UWP.Infrastructure
             }
 
             // Check if the king can move in a safe place.
-            IEnumerable<Point> possiblePositionsOfKing = GetPossibleFigurePositions(kingOfTheCurrentPlayer);
+            IEnumerable<Point> possiblePositionsOfKing = GetPossibleFigurePositions(kingOfTheCurrentPlayer, false);
             if (possiblePositionsOfKing.Count() > 0)
             {
                 return false;

@@ -1,7 +1,6 @@
 ﻿using Caliburn.Micro;
 using Chess_UWP.Database;
 using Chess_UWP.Infrastructure;
-using Chess_UWP.Infrastructure.GameProviderComponents;
 using Chess_UWP.Infrastructure.GameProviderComponents.GameTimer;
 using Chess_UWP.Infrastructure.GameProviderComponents.Logger;
 using Chess_UWP.Infrastructure.GameProviderComponents.MoveTimer;
